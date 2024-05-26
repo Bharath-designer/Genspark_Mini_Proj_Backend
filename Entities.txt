@@ -5,22 +5,22 @@
 **Users**
 
 - UserId (PK)
-- HashedPassword
-- PasswordHashKey
-- Role (Client, Admin)
-- CreatedDate
-
-**UserProfiles**
-
-- UserProfileId (PK)
-- UserId (FK)
 - Email
 - FullName
 - PhoneNumber
+- CreatedDate
+
+**UserCredentials**
+
+- UserCredentialId (PK)
+- UserId (FK)
+- HashedPassword
+- PasswordHashKey
+- Role (Client, Admin)
 
 **EventCategories**
 
-- EventId (PK)
+- EventCategoryId (PK)
 - EventName
 - Description
 - CreatedDate
@@ -29,34 +29,57 @@
 
 - QuotationRequestId (PK)
 - UserId (FK)
-- EventId (FK)
+- EventCategoryId (FK)
 - ExpectedPeopleCount
-- EventVenueType (OwnVenue, PrivateVenue)
-- VenueDetails
-- EventType
+- VenueType (OwnVenue, PrivateVenue)
+- LocationDetails
 - FoodPreference
-- CateringDetails
+- CateringInstructions
 - SpecialInstructions
-- EventDate
-- EventDuration
-- RequestStatus (Pending, Accepted, Rejected) (By Admin)
+- QuotationStatus (Initiated, Responded)
+- EventStartDate
+- EventEndDate
 - RequestedDate
 
 **QuotationResponses**
 
 - QuotationResponseId (PK)
 - QuotationRequestId (FK)
-- QuotedAmount (By the admin)
+- RequestStatus (Accepted, Rejected) (By Admin)
+- QuotedAmount? (By the admin)
 - ResponseMessage
-- ResponseStatus (Pending, Accepted, Rejected) (By Client)
 - ResponseDate
 
-**Payments**
+**ClientResponses**
 
-- PaymentId (PK)
-- QuotationResponseId (FK)
+- ClientResponseId
+- QuotationResponseId
+- ClientDecision
+- ClientResponseDate
+
+**ScheduledEvent**
+
+- ScheduledEventId
+- EventCategoryId
+- QuotationRequestId
+- UserId
+
+**Order**
+
+- OrderId
+- EventCategoryId (FK)
+- QuotationRequestId (FK)
+- UserId (FK)
+- TotalAmount
+- OrderStatus (Pending, Completed, Failed)
+- OrderDate
+
+**Transaction**
+
+- TransactionId (PK)
+- OrderId (FK)
 - Amount
-- PaymentDate
+- PaymentDate?
 - PaymentStatus (Pending, Completed, Failed)
 - PaymentMethod (CreditCard, PayPal, etc.)
 
@@ -72,9 +95,18 @@
 **Reviews**
 
 - ReviewId (PK)
-- QuotationResponseId (FK)
-- EventId (FK)
+- ClientResponseId (FK)
+- EventCategoryId (FK)
 - UserId (FK)
 - Rating
 - Comments
 - ReviewDate
+
+**Refund**
+- RefundId
+- RefundAmount
+- RefundDate
+- RefundStatus
+- OrderId
+- Order
+

@@ -1,0 +1,19 @@
+﻿using System.ComponentModel.DataAnnotations;
+using EventManagementApp.Enums;
+
+namespace EventManagementApp.Models
+{
+    public class QuotationResponse
+    {
+        [Key]
+        public int QuotationResponseId {  get; set; }
+        public int QuotationRequestId { get; set; } // Foreign Key
+        public RequestStatus RequestStatus { get; set; }
+        public double? QuotedAmount { get; set; }
+        public string ResponseMessage { get; set; }
+        public DateTime ResponseDate { get; set; }
+        public QuotationRequest QuotationRequest { get; set; }
+        public ClientResponse ClientResponse { get; set; }
+
+    }
+}
