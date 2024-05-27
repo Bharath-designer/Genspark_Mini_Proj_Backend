@@ -11,7 +11,7 @@ namespace EventManagementApp.Models
         public RequestStatus RequestStatus { get; set; }
         public double? QuotedAmount { get; set; }
         public string ResponseMessage { get; set; }
-        public DateTime ResponseDate { get; set; }
+        public DateTime ResponseDate { get; set; } = DateTime.Now;
         public QuotationRequest QuotationRequest { get; set; }
         public ClientResponse ClientResponse { get; set; }
 

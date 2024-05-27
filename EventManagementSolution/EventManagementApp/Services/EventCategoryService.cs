@@ -23,11 +23,11 @@ namespace EventManagementApp.Services
             await _eventCategoryRepository.Add(category);
         }
 
-        public async Task<List<EventCategoryDTO>> GetAllEventCategories()
+        public async Task<List<BaseEventCategoryDTO>> GetAllEventCategories()
         {
             List <EventCategory> events = await _eventCategoryRepository.GetAll();
-            List<EventCategoryDTO> eventCategoryDTOs = events
-                .Select(ec => new EventCategoryDTO
+            List<BaseEventCategoryDTO> eventCategoryDTOs = events
+                .Select(ec => new BaseEventCategoryDTO
                 {
                     EventCategoryId = ec.EventCategoryId,
                     EventName = ec.EventName,

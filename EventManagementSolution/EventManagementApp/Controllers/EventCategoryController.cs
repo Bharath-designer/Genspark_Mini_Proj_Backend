@@ -49,7 +49,8 @@ namespace EventManagementApp.Controllers
         {
             try
             {
-                List<EventCategoryDTO> events = await _eventCategoryService.GetAllEventCategories();
+
+                List<BaseEventCategoryDTO> events = await _eventCategoryService.GetAllEventCategories();
                 return Ok(events);
             }
             catch (Exception ex)

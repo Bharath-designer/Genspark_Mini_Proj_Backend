@@ -1,6 +1,8 @@
 
 using System.Text;
+using System.Text.Json.Serialization;
 using EventManagementApp.Context;
+using EventManagementApp.Interfaces;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Repositories;
@@ -25,7 +27,12 @@ namespace EventManagementApp
             })
                 .ConfigureApiBehaviorOptions(options =>
                     options.SuppressModelStateInvalidFilter = true
-                );
+                )
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -48,14 +55,24 @@ namespace EventManagementApp
             );
 
             #region Services
-            builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+            builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
             builder.Services.AddScoped(typeof(TokenService));
             builder.Services.AddScoped(typeof(IEventCategoryService), typeof(EventCategoryService));
+            builder.Services.AddScoped(typeof(IQuotationRequestService), typeof(QuotationRequestService));
+            builder.Services.AddScoped(typeof(IQuotationResponseService), typeof(QuotationResponseService));
+            builder.Services.AddScoped(typeof(IClientResponseService), typeof(ClientResponseService));
+            builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+            builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             #endregion
 
             #region Repositories
             builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRespository));
             builder.Services.AddScoped(typeof(IEventCategoryRepository), typeof(EventCategoryRepository));  
+            builder.Services.AddScoped(typeof(IQuotationRequestRepository), typeof(QuotationRequestRepository));
+            builder.Services.AddScoped(typeof(IQuotationResponseRepository), typeof(QuotationResponseRepository));
+            builder.Services.AddScoped(typeof(IClientResponseRepository), typeof(ClientResponseRepository));
+            builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+
             #endregion
 
 

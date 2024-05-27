@@ -6,7 +6,7 @@ namespace EventManagementApp.Interfaces.Service
     public interface IEventCategoryService
     {
         public Task CreateEventCategory(CreateEventCategoryDTO eventCategoryDTO);
-        public Task<List<EventCategoryDTO>> GetAllEventCategories();
+        public Task<List<BaseEventCategoryDTO>> GetAllEventCategories();
 
     }
 }

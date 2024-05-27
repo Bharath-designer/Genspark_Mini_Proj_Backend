@@ -14,9 +14,10 @@ namespace EventManagementApp.Models
         public FoodPreference FoodPreference { get; set; }
         public string? CateringInstructions { get; set; }
         public string SpecialInstructions { get; set; }
-        public QuotationStatus QuotationStatus { get; set; }
+        public QuotationStatus QuotationStatus { get; set; } = QuotationStatus.Initiated;
         public DateTime EventStartDate { get; set; }
         public DateTime EventEndDate { get; set; }
+        public DateTime RequestDate {get; set;} = DateTime.Now;
         public User User { get; set; }
         public EventCategory EventCategory { get; set; }
         public QuotationResponse QuotationResponse { get; set; }
