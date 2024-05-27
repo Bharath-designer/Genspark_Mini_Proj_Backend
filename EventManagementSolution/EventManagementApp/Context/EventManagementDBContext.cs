@@ -1,4 +1,7 @@
-﻿using EventManagementApp.Models;
+﻿using System.Security.Cryptography;
+using System.Text;
+using EventManagementApp.Enums;
+using EventManagementApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementApp.Context
@@ -146,8 +149,28 @@ namespace EventManagementApp.Context
                 }
             }
 
+            (User adminUser, UserCredential adminUserCredential) = CreateAdminUser();
+            modelBuilder.Entity<User>().HasData(adminUser);
+            modelBuilder.Entity<UserCredential>().HasData(adminUserCredential);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        private (User, UserCredential) CreateAdminUser()
+        {
+            User admin = new User();
+            UserCredential credential = new UserCredential();
+            HMACSHA512 hMACSHA = new HMACSHA512();
+            credential.HashKey = hMACSHA.Key;
+            credential.HashedPassword = hMACSHA.ComputeHash(Encoding.UTF8.GetBytes("admin@1289"));
+            credential.Role = UserType.Admin;
+            credential.UserId = 1;
+            credential.UserCredentialId = 1;
+            admin.UserId = 1;
+            admin.FullName = "Book My Event";
+            admin.Email = "admin@bookmyevent.in";
+            admin.PhoneNumber = "97343792398";
+            return (admin, credential);
         }
 
     }

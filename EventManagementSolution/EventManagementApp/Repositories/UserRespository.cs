@@ -11,7 +11,13 @@ namespace EventManagementApp.Repositories
 
         public async Task<User> GetUserByEmail(string email)
         {
-            User user = await _context.Users.Include(u=>u.UserCredential).FirstOrDefaultAsync(u=>u.Email == email);
+            User? user = await _context.Users.FirstOrDefaultAsync(u=>u.Email == email);
+            return user;
+        }
+
+        public async Task<User> GetUserByEmailWithUserCredential(string email)
+        {
+            User? user = await _context.Users.Include(u => u.UserCredential).FirstOrDefaultAsync(u => u.Email == email);
             return user;
         }
     }

@@ -4,6 +4,7 @@ using EventManagementApp.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    partial class EventManagementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240526151630_updated")]
+    partial class updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -378,16 +381,6 @@ namespace EventManagementApp.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 27, 6, 46, 27, 759, DateTimeKind.Local).AddTicks(8420),
-                            Email = "admin@bookmyevent.in",
-                            FullName = "Book My Event",
-                            PhoneNumber = "97343792398"
-                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.UserCredential", b =>
@@ -419,16 +412,6 @@ namespace EventManagementApp.Migrations
                         .IsUnique();
 
                     b.ToTable("UserCredentials");
-
-                    b.HasData(
-                        new
-                        {
-                            UserCredentialId = 1,
-                            HashKey = new byte[] { 89, 216, 17, 46, 214, 105, 82, 8, 41, 213, 228, 212, 3, 251, 223, 217, 198, 29, 66, 64, 210, 246, 145, 226, 171, 164, 41, 197, 12, 82, 6, 104, 197, 80, 249, 6, 132, 213, 185, 199, 255, 123, 127, 233, 33, 7, 181, 59, 118, 23, 236, 52, 121, 86, 251, 44, 44, 23, 32, 65, 141, 173, 139, 17, 85, 163, 84, 155, 187, 21, 198, 64, 159, 249, 197, 5, 222, 144, 226, 46, 5, 170, 105, 12, 209, 161, 239, 241, 203, 173, 207, 214, 228, 166, 32, 255, 180, 214, 47, 202, 215, 21, 109, 23, 223, 80, 61, 122, 167, 120, 182, 104, 94, 160, 157, 164, 108, 250, 73, 133, 150, 116, 203, 50, 151, 27, 245, 204 },
-                            HashedPassword = new byte[] { 114, 67, 96, 144, 142, 116, 167, 39, 16, 183, 94, 248, 185, 5, 99, 44, 10, 73, 25, 226, 67, 194, 167, 156, 211, 156, 157, 161, 113, 229, 234, 13, 245, 253, 217, 144, 33, 133, 202, 128, 84, 159, 79, 176, 128, 51, 2, 140, 88, 58, 153, 245, 36, 153, 70, 36, 95, 109, 44, 163, 209, 175, 103, 82 },
-                            Role = "Admin",
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.ClientResponse", b =>
