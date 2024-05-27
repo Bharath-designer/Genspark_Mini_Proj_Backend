@@ -1,91 +1,77 @@
-﻿using EventManagementApp.DTOs.User;
-using EventManagementApp.Exceptions;
+﻿using EventManagementApp.DTOs.QuotationRequest;
+using EventManagementApp.DTOs.User;
 using EventManagementApp.Interfaces.Service;
-using EventManagementApp.Services;
+using EventManagementApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagementApp.Controllers
 {
-    [Route("api/")]
+    [Route("api/user/")]
     [ApiController]
-    public class UserController : ControllerBase
+    [Authorize(Roles = "User")]
+    public class UserController: ControllerBase
     {
-        private readonly IUserService _useService;
+        private readonly IUserService _userService;
 
-        public UserController(IUserService useService)
+        public UserController(IUserService userService)
         {
-            _useService = useService;
+            _userService = userService;
         }
 
-        [Route("register")]
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
-        {
-            try
-            {
-
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                    var customErrorResponse = new
-                    {
-                        Title = "One or more validation errors occurred.",
-                        Errors = errors
-                    };
-
-                    return BadRequest(customErrorResponse);
-                }
-
-                await _useService.AddUser(registerDTO);
-                return StatusCode(StatusCodes.Status201Created, "User created successfully");
-            }
-            catch (EmailAlreadyExistsException eafe)
-            {
-                return BadRequest(eafe.Message);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
-            }
-
-        }
-
-        [Route("login")]
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginDTO loginDTO)
+        [Route("requests")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserRequests()
         {
             try
             {
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
 
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                    var customErrorResponse = new
-                    {
-                        Status = 400,
-                        Title = "One or more validation errors occurred.",
-                        Errors = errors
-                    };
-
-                    return BadRequest(customErrorResponse);
-                }
-
-                LoginReturnDTO loginReturn = await _useService.Login(loginDTO);
-
-                return Ok(loginReturn);
-
+                List<UserRequestListDTO> requests = await _userService.GetUserRequests(UserId);
+                return Ok(requests);
             }
-            catch (InvalidEmailOrPasswordException ex)
+            catch (Exception ex)
             {
-                return Unauthorized(ex.Message);
-            }
-            catch (Exception)
-            {
+                await Console.Out.WriteLineAsync(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
+
+        [Route("requests/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserRequests(int id)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
+
+                UserQuotationRequestDTO requests = await _userService.GetUserRequestById(UserId, id);
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
+        [Route("orders")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserOrders()
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
+
+                List<UserOrderListReturnDTO> requests = await _userService.GetUserOrders(UserId);
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
     }
 }

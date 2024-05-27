@@ -1,6 +1,6 @@
 ﻿namespace EventManagementApp.DTOs.EventCategory
 {
-    public class EventCategoryDTO
+    public class BaseEventCategoryDTO
     {
         public int EventCategoryId { get; set; }
         public string EventName { get; set; }

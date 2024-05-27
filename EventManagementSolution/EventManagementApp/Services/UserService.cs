@@ -1,90 +1,37 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.DTOs.User;
-using EventManagementApp.Enums;
-using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
 
 namespace EventManagementApp.Services
 {
-    public class UserService : IUserService
+    public class UserService: IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly TokenService _tokenService;
 
-        public UserService(IUserRepository userRepository, TokenService tokenService) { 
+        public UserService(IUserRepository userRepository)
+        {
             _userRepository = userRepository;
-            _tokenService = tokenService;
         }
 
-        public async Task AddUser(RegisterDTO registerDTO)
+        public async Task<UserQuotationRequestDTO> GetUserRequestById(int userId, int quotationRequestId)
         {
-            User existingUser = await _userRepository.GetUserByEmail(registerDTO.Email);
-            if (existingUser != null) {
-                throw new EmailAlreadyExistsException();
-            }
-
-            User user = MapRegisterDTOWithUser(registerDTO);
-            await _userRepository.Add(user);
-
+            UserQuotationRequestDTO quotationRequest = await _userRepository.GetUserRequestById(userId, quotationRequestId);
+            return quotationRequest;
         }
 
-        private User MapRegisterDTOWithUser(RegisterDTO registerDTO)
+        public async Task<List<UserRequestListDTO>> GetUserRequests(int userId)
         {
-            User user = new User();
-            user.Email = registerDTO.Email;
-            user.FullName = registerDTO.FullName;
-            user.PhoneNumber = registerDTO.PhoneNumber;
-            user.UserCredential = CreateUserCredential(registerDTO.Password);
-            return user;
+            List<UserRequestListDTO> quotationRequests = await _userRepository.GetUserRequests(userId);
+            return quotationRequests;
+
         }
 
-        private UserCredential CreateUserCredential(string plainPassword)
+        public async Task<List<UserOrderListReturnDTO>> GetUserOrders(int userId)
         {
-            UserCredential credential = new UserCredential();
-            HMACSHA512 hMACSHA = new HMACSHA512();
-
-            credential.HashKey = hMACSHA.Key;
-            credential.HashedPassword = hMACSHA.ComputeHash(Encoding.UTF8.GetBytes(plainPassword));
-            credential.Role = UserType.User;
-
-            return credential;
+            return await _userRepository.GetUserOrders(userId);
         }
 
-        public async Task<LoginReturnDTO> Login(LoginDTO loginDTO)
-        {
-            User storedUser = await _userRepository.GetUserByEmailWithUserCredential(loginDTO.Email);
-            if (storedUser == null)
-            {
-                throw new InvalidEmailOrPasswordException();
-            }
-
-            HMACSHA512 hMACSHA = new HMACSHA512(storedUser.UserCredential.HashKey);
-            var encrypterPass = hMACSHA.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.Password));
-
-            bool isPasswordSame = ComparePassword(encrypterPass, storedUser.UserCredential.HashedPassword);
-            if (isPasswordSame)
-            {
-                LoginReturnDTO loginReturnDTO = new LoginReturnDTO();
-                loginReturnDTO.UserId = storedUser.UserId;
-                loginReturnDTO.token = _tokenService.GenerateToken(storedUser);
-                return loginReturnDTO;
-            }
-            throw new InvalidEmailOrPasswordException();
-        }
-
-        private bool ComparePassword(byte[] encrypterPass, byte[] password)
-        {
-            for (int i = 0; i < encrypterPass.Length; i++)
-            {
-                if (encrypterPass[i] != password[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
     }
 }

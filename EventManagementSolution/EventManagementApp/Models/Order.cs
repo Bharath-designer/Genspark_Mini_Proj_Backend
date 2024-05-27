@@ -12,7 +12,7 @@ namespace EventManagementApp.Models
         public int UserId { get; set; } // Foreign Key
         public double TotalAmount { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public DateTime OrderDate { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.Now;
         public EventCategory EventCategory { get; set; }
         public ClientResponse ClientResponse { get; set; }
         public User User { get; set; }

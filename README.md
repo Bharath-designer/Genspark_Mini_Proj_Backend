@@ -39,7 +39,7 @@
 - SpecialInstructions
 - EventDate
 - EventDuration
-- RequestStatus (Pending, Accepted, Rejected) (By Admin)
+- RequestStatus (Initiated, Responded)
 - RequestedDate
 
 **QuotationResponses**
@@ -48,7 +48,7 @@
 - QuotationRequestId (FK)
 - QuotedAmount (By the admin)
 - ResponseMessage
-- ResponseStatus (Pending, Accepted, Rejected) (By Client)
+- ResponseStatus (Pending, Accepted, Rejected) (By Admin)
 - ResponseDate
 
 **Payments**
