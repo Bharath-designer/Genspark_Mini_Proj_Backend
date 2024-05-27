@@ -9,7 +9,7 @@ namespace EventManagementApp.Models
         public int UserCredentialId {  get; set; }
         public int UserId { get; set; } // Foreign Key
         public byte[] HashedPassword { get; set; }
-        public byte[] HaskKey { get; set; }
+        public byte[] HashKey { get; set; }
         public UserType Role { get; set; }
         public User User { get; set; }
     }
