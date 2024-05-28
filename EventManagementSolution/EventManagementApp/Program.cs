@@ -63,6 +63,10 @@ namespace EventManagementApp
             builder.Services.AddScoped(typeof(IClientResponseService), typeof(ClientResponseService));
             builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
             builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
+            builder.Services.AddScoped(typeof(IAdminService), typeof(AdminService));
+            builder.Services.AddScoped(typeof(IScheduledEventService), typeof(SchedulesEventService));
+
+
             #endregion
 
             #region Repositories
@@ -72,6 +76,8 @@ namespace EventManagementApp
             builder.Services.AddScoped(typeof(IQuotationResponseRepository), typeof(QuotationResponseRepository));
             builder.Services.AddScoped(typeof(IClientResponseRepository), typeof(ClientResponseRepository));
             builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+            builder.Services.AddScoped(typeof(ITransactionRepository), typeof(TransactionRepository));
+            builder.Services.AddScoped(typeof(IScheduledEventRepository), typeof(ScheduledEventRepository));
 
             #endregion
 

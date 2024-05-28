@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    [Migration("20240527011628_adminAdded")]
-    partial class adminAdded
+    [Migration("20240528064726_EventStatusUpdated")]
+    partial class EventStatusUpdated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,9 @@ namespace EventManagementApp.Migrations
                     b.Property<string>("EventName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("EventCategoryId");
 
@@ -173,6 +176,9 @@ namespace EventManagementApp.Migrations
                     b.Property<string>("QuotationStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SpecialInstructions")
                         .IsRequired()
@@ -308,6 +314,9 @@ namespace EventManagementApp.Migrations
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("QuotationRequestId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -318,6 +327,9 @@ namespace EventManagementApp.Migrations
 
                     b.HasIndex("EventCategoryId");
 
+                    b.HasIndex("QuotationRequestId")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("ScheduledEvents");
@@ -325,11 +337,8 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -341,10 +350,13 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -386,7 +398,7 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 27, 6, 46, 27, 759, DateTimeKind.Local).AddTicks(8420),
+                            CreatedAt = new DateTime(2024, 5, 28, 12, 17, 25, 110, DateTimeKind.Local).AddTicks(8672),
                             Email = "admin@bookmyevent.in",
                             FullName = "Book My Event",
                             PhoneNumber = "97343792398"
@@ -427,8 +439,8 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserCredentialId = 1,
-                            HashKey = new byte[] { 89, 216, 17, 46, 214, 105, 82, 8, 41, 213, 228, 212, 3, 251, 223, 217, 198, 29, 66, 64, 210, 246, 145, 226, 171, 164, 41, 197, 12, 82, 6, 104, 197, 80, 249, 6, 132, 213, 185, 199, 255, 123, 127, 233, 33, 7, 181, 59, 118, 23, 236, 52, 121, 86, 251, 44, 44, 23, 32, 65, 141, 173, 139, 17, 85, 163, 84, 155, 187, 21, 198, 64, 159, 249, 197, 5, 222, 144, 226, 46, 5, 170, 105, 12, 209, 161, 239, 241, 203, 173, 207, 214, 228, 166, 32, 255, 180, 214, 47, 202, 215, 21, 109, 23, 223, 80, 61, 122, 167, 120, 182, 104, 94, 160, 157, 164, 108, 250, 73, 133, 150, 116, 203, 50, 151, 27, 245, 204 },
-                            HashedPassword = new byte[] { 114, 67, 96, 144, 142, 116, 167, 39, 16, 183, 94, 248, 185, 5, 99, 44, 10, 73, 25, 226, 67, 194, 167, 156, 211, 156, 157, 161, 113, 229, 234, 13, 245, 253, 217, 144, 33, 133, 202, 128, 84, 159, 79, 176, 128, 51, 2, 140, 88, 58, 153, 245, 36, 153, 70, 36, 95, 109, 44, 163, 209, 175, 103, 82 },
+                            HashKey = new byte[] { 185, 244, 168, 243, 162, 141, 59, 183, 7, 158, 233, 130, 61, 26, 215, 33, 172, 115, 76, 165, 116, 154, 87, 113, 50, 15, 222, 82, 207, 213, 165, 68, 128, 202, 82, 173, 39, 219, 172, 41, 134, 181, 50, 48, 26, 207, 253, 48, 0, 131, 239, 84, 214, 114, 125, 159, 150, 136, 30, 14, 162, 121, 207, 152, 186, 230, 247, 126, 200, 51, 134, 100, 23, 180, 149, 84, 73, 124, 13, 69, 167, 254, 77, 24, 176, 60, 52, 254, 53, 236, 141, 133, 102, 234, 26, 34, 30, 152, 138, 164, 121, 153, 240, 206, 181, 1, 94, 162, 116, 55, 187, 26, 232, 8, 166, 204, 127, 112, 14, 111, 227, 4, 179, 236, 67, 88, 246, 113 },
+                            HashedPassword = new byte[] { 55, 214, 159, 120, 168, 13, 128, 47, 136, 13, 0, 217, 203, 137, 177, 42, 27, 218, 153, 119, 43, 98, 24, 134, 17, 233, 79, 46, 172, 252, 225, 62, 200, 210, 189, 100, 146, 143, 193, 201, 79, 247, 156, 189, 122, 0, 239, 41, 89, 89, 54, 168, 186, 113, 237, 147, 253, 153, 66, 85, 133, 226, 195, 70 },
                             Role = "Admin",
                             UserId = 1
                         });
@@ -565,6 +577,12 @@ namespace EventManagementApp.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EventManagementApp.Models.QuotationRequest", "QuotationRequest")
+                        .WithOne()
+                        .HasForeignKey("EventManagementApp.Models.ScheduledEvent", "QuotationRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("EventManagementApp.Models.User", "User")
                         .WithMany("ScheduledEvents")
                         .HasForeignKey("UserId")
@@ -574,6 +592,8 @@ namespace EventManagementApp.Migrations
                     b.Navigation("ClientResponse");
 
                     b.Navigation("EventCategory");
+
+                    b.Navigation("QuotationRequest");
 
                     b.Navigation("User");
                 });

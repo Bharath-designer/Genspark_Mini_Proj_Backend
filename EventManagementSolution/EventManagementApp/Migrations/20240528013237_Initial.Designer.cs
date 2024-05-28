@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    [Migration("20240526143117_UpdatedEnums")]
-    partial class UpdatedEnums
+    [Migration("20240528013237_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,6 +174,9 @@ namespace EventManagementApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SpecialInstructions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -325,11 +328,8 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -345,6 +345,10 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -381,6 +385,16 @@ namespace EventManagementApp.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            CreatedAt = new DateTime(2024, 5, 28, 7, 2, 36, 802, DateTimeKind.Local).AddTicks(215),
+                            Email = "admin@bookmyevent.in",
+                            FullName = "Book My Event",
+                            PhoneNumber = "97343792398"
+                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.UserCredential", b =>
@@ -391,11 +405,11 @@ namespace EventManagementApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserCredentialId"));
 
-                    b.Property<byte[]>("HashedPassword")
+                    b.Property<byte[]>("HashKey")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<byte[]>("HaskKey")
+                    b.Property<byte[]>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -412,6 +426,16 @@ namespace EventManagementApp.Migrations
                         .IsUnique();
 
                     b.ToTable("UserCredentials");
+
+                    b.HasData(
+                        new
+                        {
+                            UserCredentialId = 1,
+                            HashKey = new byte[] { 195, 208, 95, 32, 94, 143, 206, 151, 208, 110, 42, 238, 102, 151, 194, 56, 148, 192, 188, 89, 233, 191, 191, 183, 239, 191, 111, 202, 59, 155, 238, 67, 164, 218, 140, 37, 83, 96, 128, 105, 7, 124, 25, 79, 123, 221, 39, 65, 56, 194, 17, 213, 169, 77, 50, 231, 90, 39, 83, 29, 189, 128, 151, 246, 119, 146, 70, 92, 143, 177, 219, 119, 62, 163, 245, 165, 132, 177, 184, 28, 100, 145, 203, 57, 191, 122, 249, 235, 196, 246, 107, 213, 198, 195, 104, 89, 215, 200, 60, 187, 42, 151, 66, 80, 72, 45, 1, 27, 102, 218, 120, 133, 110, 163, 179, 157, 38, 82, 149, 108, 204, 167, 48, 194, 190, 204, 32, 124 },
+                            HashedPassword = new byte[] { 45, 116, 149, 207, 144, 8, 108, 159, 157, 97, 14, 16, 54, 23, 33, 117, 126, 199, 86, 66, 25, 150, 53, 156, 33, 31, 29, 35, 90, 178, 187, 49, 190, 162, 238, 107, 174, 50, 133, 14, 39, 204, 138, 208, 26, 227, 230, 195, 123, 242, 114, 212, 253, 245, 83, 118, 202, 222, 54, 134, 56, 115, 101, 75 },
+                            Role = "Admin",
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.ClientResponse", b =>

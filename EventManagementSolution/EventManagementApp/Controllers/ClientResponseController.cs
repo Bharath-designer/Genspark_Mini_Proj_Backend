@@ -3,12 +3,14 @@ using EventManagementApp.Enums;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagementApp.Controllers
 {
-    [Route("api/client")]
+    [Route("api/user/response")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class ClientResponseController : ControllerBase
     {
         private readonly IClientResponseService _clientResponseService;

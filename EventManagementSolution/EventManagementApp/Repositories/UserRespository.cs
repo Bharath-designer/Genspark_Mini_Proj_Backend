@@ -4,6 +4,7 @@ using EventManagementApp.DTOs.EventCategory;
 using EventManagementApp.DTOs.Quotation;
 using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.DTOs.User;
+using EventManagementApp.Enums;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +54,8 @@ namespace EventManagementApp.Repositories
                         ClientResponse = q.QuotationResponse.ClientResponse != null ? new ClientResponseDecisionDTO
                         {
                             ClientDecision = q.QuotationResponse.ClientResponse.ClientDecision,
-                            OrderId = q.QuotationResponse.ClientResponse.Order.OrderId
+                            OrderId = q.QuotationResponse.ClientResponse.Order.OrderId,
+                            IsPaid = q.QuotationResponse.ClientResponse.Order.OrderStatus == OrderStatus.Completed ? true: false
                         } : null,
                     } : null
                 })
@@ -107,5 +109,13 @@ namespace EventManagementApp.Repositories
             return userOrders;
         }
 
+        public async Task<Order> GetUserOrder(int UserId, int OrderId)
+        {
+            Order? order = await _context.Orders
+                .Include(o=>o.ClientResponse)
+                .ThenInclude(c=>c.Review)
+                .FirstOrDefaultAsync(o=>o.OrderId == OrderId && o.UserId == UserId);
+            return order;
+        }
     }
 }

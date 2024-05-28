@@ -18,7 +18,6 @@ namespace EventManagementApp.Context
         #region DbSets
         public DbSet<ClientResponse> ClientResponses { get; set; }
         public DbSet<EventCategory> EventCategories { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<QuotationRequest> QuotationRequests { get; set; }
         public DbSet<QuotationResponse> QuotationResponses { get; set; }
@@ -37,12 +36,6 @@ namespace EventManagementApp.Context
                 .HasOne(c => c.QuotationResponse)
                 .WithOne(q => q.ClientResponse)
                 .HasForeignKey<ClientResponse>(c => c.QuotationResponseId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Notification>()
-                .HasOne(n => n.User)
-                .WithMany(u => u.Notifications)
-                .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Order>()
@@ -121,6 +114,12 @@ namespace EventManagementApp.Context
                 .HasOne(s => s.User)
                 .WithMany(u => u.ScheduledEvents)
                 .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ScheduledEvent>()
+                .HasOne(s => s.QuotationRequest)
+                .WithOne()
+                .HasForeignKey<ScheduledEvent>(s => s.QuotationRequestId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Transaction>()
