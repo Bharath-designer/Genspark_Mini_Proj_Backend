@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    [Migration("20240525041740_Initial")]
-    partial class Initial
+    [Migration("20240528071705_Updated_Notification")]
+    partial class Updated_Notification
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,9 @@ namespace EventManagementApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientResponseId"));
 
-                    b.Property<int>("ClientDecision")
-                        .HasColumnType("int");
+                    b.Property<string>("ClientDecision")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ClientResponseDate")
                         .HasColumnType("datetime2");
@@ -69,37 +70,12 @@ namespace EventManagementApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("EventCategoryId");
 
                     b.ToTable("EventCategories");
-                });
-
-            modelBuilder.Entity("EventManagementApp.Models.Notification", b =>
-                {
-                    b.Property<int>("NotificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("NotificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isRead")
-                        .HasColumnType("bit");
-
-                    b.HasKey("NotificationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.Order", b =>
@@ -119,8 +95,9 @@ namespace EventManagementApp.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("TotalAmount")
                         .HasColumnType("float");
@@ -160,15 +137,20 @@ namespace EventManagementApp.Migrations
                     b.Property<DateTime>("EventStartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FoodPreference")
-                        .HasColumnType("int");
+                    b.Property<string>("FoodPreference")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LocationDetails")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuotationStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("QuotationStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SpecialInstructions")
                         .IsRequired()
@@ -177,8 +159,9 @@ namespace EventManagementApp.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VenueType")
-                        .HasColumnType("int");
+                    b.Property<string>("VenueType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("QuotationRequestId");
 
@@ -203,8 +186,9 @@ namespace EventManagementApp.Migrations
                     b.Property<double?>("QuotedAmount")
                         .HasColumnType("float");
 
-                    b.Property<int>("RequestStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("RequestStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ResponseDate")
                         .HasColumnType("datetime2");
@@ -238,8 +222,9 @@ namespace EventManagementApp.Migrations
                     b.Property<DateTime>("RefundDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RefundStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("RefundStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RefundId");
 
@@ -301,6 +286,9 @@ namespace EventManagementApp.Migrations
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("QuotationRequestId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -311,6 +299,9 @@ namespace EventManagementApp.Migrations
 
                     b.HasIndex("EventCategoryId");
 
+                    b.HasIndex("QuotationRequestId")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("ScheduledEvents");
@@ -318,11 +309,8 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -334,11 +322,15 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TransactionId");
 
@@ -373,6 +365,16 @@ namespace EventManagementApp.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            CreatedAt = new DateTime(2024, 5, 28, 12, 47, 3, 555, DateTimeKind.Local).AddTicks(8105),
+                            Email = "admin@bookmyevent.in",
+                            FullName = "Book My Event",
+                            PhoneNumber = "97343792398"
+                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.UserCredential", b =>
@@ -383,16 +385,17 @@ namespace EventManagementApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserCredentialId"));
 
+                    b.Property<byte[]>("HashKey")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<byte[]>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<byte[]>("HaskKey")
+                    b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -403,6 +406,16 @@ namespace EventManagementApp.Migrations
                         .IsUnique();
 
                     b.ToTable("UserCredentials");
+
+                    b.HasData(
+                        new
+                        {
+                            UserCredentialId = 1,
+                            HashKey = new byte[] { 2, 92, 155, 230, 38, 52, 135, 249, 136, 117, 150, 153, 251, 254, 154, 255, 213, 25, 82, 219, 93, 232, 240, 0, 124, 121, 143, 15, 55, 35, 121, 212, 3, 16, 87, 230, 185, 21, 27, 53, 86, 162, 16, 118, 93, 23, 155, 13, 0, 205, 78, 44, 149, 39, 35, 228, 167, 177, 6, 124, 144, 70, 231, 175, 161, 205, 253, 28, 230, 175, 88, 50, 17, 50, 210, 201, 141, 133, 117, 186, 84, 234, 34, 75, 213, 233, 21, 148, 88, 69, 85, 107, 165, 98, 237, 230, 14, 49, 122, 185, 253, 9, 218, 197, 152, 53, 221, 80, 248, 94, 82, 234, 167, 98, 29, 22, 64, 95, 15, 184, 216, 2, 126, 153, 21, 55, 174, 142 },
+                            HashedPassword = new byte[] { 241, 158, 183, 103, 15, 225, 215, 99, 8, 15, 185, 186, 110, 115, 163, 206, 184, 208, 188, 78, 33, 176, 65, 107, 1, 240, 101, 117, 198, 150, 132, 205, 163, 97, 200, 226, 149, 70, 169, 6, 242, 221, 0, 87, 51, 5, 76, 228, 39, 53, 69, 151, 226, 200, 40, 174, 34, 74, 237, 180, 191, 11, 5, 18 },
+                            Role = "Admin",
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.ClientResponse", b =>
@@ -414,17 +427,6 @@ namespace EventManagementApp.Migrations
                         .IsRequired();
 
                     b.Navigation("QuotationResponse");
-                });
-
-            modelBuilder.Entity("EventManagementApp.Models.Notification", b =>
-                {
-                    b.HasOne("EventManagementApp.Models.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.Order", b =>
@@ -536,6 +538,12 @@ namespace EventManagementApp.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EventManagementApp.Models.QuotationRequest", "QuotationRequest")
+                        .WithOne()
+                        .HasForeignKey("EventManagementApp.Models.ScheduledEvent", "QuotationRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("EventManagementApp.Models.User", "User")
                         .WithMany("ScheduledEvents")
                         .HasForeignKey("UserId")
@@ -545,6 +553,8 @@ namespace EventManagementApp.Migrations
                     b.Navigation("ClientResponse");
 
                     b.Navigation("EventCategory");
+
+                    b.Navigation("QuotationRequest");
 
                     b.Navigation("User");
                 });
@@ -612,8 +622,6 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.User", b =>
                 {
-                    b.Navigation("Notifications");
-
                     b.Navigation("Orders");
 
                     b.Navigation("QuotationRequests");

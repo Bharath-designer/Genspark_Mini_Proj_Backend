@@ -67,37 +67,12 @@ namespace EventManagementApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("EventCategoryId");
 
                     b.ToTable("EventCategories");
-                });
-
-            modelBuilder.Entity("EventManagementApp.Models.Notification", b =>
-                {
-                    b.Property<int>("NotificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("NotificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isRead")
-                        .HasColumnType("bit");
-
-                    b.HasKey("NotificationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.Order", b =>
@@ -308,6 +283,12 @@ namespace EventManagementApp.Migrations
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QuotationRequestId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -318,6 +299,9 @@ namespace EventManagementApp.Migrations
 
                     b.HasIndex("EventCategoryId");
 
+                    b.HasIndex("QuotationRequestId")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("ScheduledEvents");
@@ -325,11 +309,8 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -341,10 +322,13 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -386,7 +370,7 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 27, 9, 44, 58, 457, DateTimeKind.Local).AddTicks(5933),
+                            CreatedAt = new DateTime(2024, 5, 28, 12, 50, 27, 823, DateTimeKind.Local).AddTicks(4854),
                             Email = "admin@bookmyevent.in",
                             FullName = "Book My Event",
                             PhoneNumber = "97343792398"
@@ -427,8 +411,8 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserCredentialId = 1,
-                            HashKey = new byte[] { 152, 59, 230, 154, 128, 163, 7, 114, 190, 92, 234, 251, 160, 54, 183, 15, 134, 71, 228, 117, 66, 213, 15, 238, 100, 226, 114, 146, 170, 82, 4, 215, 166, 15, 205, 236, 72, 24, 145, 36, 247, 201, 249, 5, 254, 214, 85, 206, 41, 208, 98, 108, 7, 250, 166, 233, 206, 162, 122, 118, 41, 247, 8, 178, 107, 154, 112, 90, 197, 165, 62, 39, 59, 164, 6, 34, 102, 87, 161, 17, 220, 108, 2, 16, 73, 13, 131, 95, 139, 9, 9, 190, 216, 227, 78, 28, 245, 28, 169, 72, 61, 189, 166, 114, 92, 143, 126, 175, 253, 235, 1, 133, 228, 179, 179, 132, 220, 26, 80, 247, 129, 191, 214, 17, 187, 89, 44, 45 },
-                            HashedPassword = new byte[] { 31, 193, 193, 230, 229, 129, 247, 201, 151, 88, 66, 181, 137, 125, 67, 206, 31, 160, 222, 128, 226, 225, 95, 41, 237, 197, 91, 228, 250, 208, 155, 85, 238, 32, 70, 209, 210, 67, 215, 97, 71, 248, 162, 48, 231, 53, 91, 215, 140, 92, 161, 17, 118, 41, 3, 214, 113, 227, 207, 145, 67, 53, 212, 20 },
+                            HashKey = new byte[] { 31, 59, 86, 36, 208, 163, 227, 71, 218, 223, 89, 126, 145, 220, 155, 132, 90, 119, 35, 222, 156, 244, 142, 18, 55, 153, 194, 43, 89, 121, 148, 168, 42, 231, 172, 110, 72, 197, 70, 11, 184, 34, 217, 15, 218, 156, 203, 250, 86, 221, 156, 53, 93, 56, 81, 211, 183, 76, 32, 73, 73, 225, 101, 191, 209, 70, 1, 125, 131, 200, 118, 228, 220, 204, 4, 240, 60, 142, 105, 129, 137, 97, 158, 15, 211, 201, 138, 192, 149, 168, 97, 14, 39, 250, 54, 208, 95, 197, 112, 79, 207, 195, 191, 232, 226, 129, 221, 248, 108, 188, 99, 229, 250, 184, 112, 212, 189, 246, 175, 223, 137, 108, 202, 9, 23, 29, 170, 68 },
+                            HashedPassword = new byte[] { 235, 147, 30, 129, 229, 167, 112, 53, 110, 174, 103, 143, 34, 255, 197, 139, 54, 144, 202, 187, 53, 200, 237, 46, 63, 83, 21, 194, 245, 127, 181, 130, 64, 83, 33, 196, 134, 237, 92, 154, 45, 25, 41, 140, 37, 181, 20, 175, 195, 26, 114, 6, 192, 146, 215, 0, 202, 233, 93, 140, 56, 12, 90, 54 },
                             Role = "Admin",
                             UserId = 1
                         });
@@ -443,17 +427,6 @@ namespace EventManagementApp.Migrations
                         .IsRequired();
 
                     b.Navigation("QuotationResponse");
-                });
-
-            modelBuilder.Entity("EventManagementApp.Models.Notification", b =>
-                {
-                    b.HasOne("EventManagementApp.Models.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.Order", b =>
@@ -565,6 +538,12 @@ namespace EventManagementApp.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EventManagementApp.Models.QuotationRequest", "QuotationRequest")
+                        .WithOne()
+                        .HasForeignKey("EventManagementApp.Models.ScheduledEvent", "QuotationRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("EventManagementApp.Models.User", "User")
                         .WithMany("ScheduledEvents")
                         .HasForeignKey("UserId")
@@ -574,6 +553,8 @@ namespace EventManagementApp.Migrations
                     b.Navigation("ClientResponse");
 
                     b.Navigation("EventCategory");
+
+                    b.Navigation("QuotationRequest");
 
                     b.Navigation("User");
                 });
@@ -641,8 +622,6 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.User", b =>
                 {
-                    b.Navigation("Notifications");
-
                     b.Navigation("Orders");
 
                     b.Navigation("QuotationRequests");

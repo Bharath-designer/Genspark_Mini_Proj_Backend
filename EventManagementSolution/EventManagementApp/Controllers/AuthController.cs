@@ -9,6 +9,7 @@ namespace EventManagementApp.Controllers
 {
     [Route("api/")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -20,7 +21,6 @@ namespace EventManagementApp.Controllers
 
         [Route("register")]
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
             try
@@ -45,7 +45,7 @@ namespace EventManagementApp.Controllers
             {
                 return BadRequest(eafe.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
@@ -54,8 +54,7 @@ namespace EventManagementApp.Controllers
 
         [Route("login")]
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginDTO loginDTO)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             try
             {
@@ -88,6 +87,6 @@ namespace EventManagementApp.Controllers
             }
         }
 
-        
+
     }
 }

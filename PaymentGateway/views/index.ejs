@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management Payment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .home {
+            height: 100svh;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-wrapper {
+            width: min(90%, 30em);
+            padding: 1.5em;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+
+        .payment-title {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .payment-amount {}
+
+        #button-container {
+            display: flex;
+            gap: .75em;
+        }
+
+        .btn {
+            padding: .4em 1em;
+            border-radius: 0;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn.pay {
+            background: rgb(6, 154, 6);
+        }
+
+        .btn.cancel {
+            background: rgb(220, 39, 7);
+        }
+        #expiredText {
+            color: red;
+            text-align: center;
+        }
+
+        #timer {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="home">
+        <div class="payment-wrapper">
+            <div class="payment-title">
+                Confirm Your Payment
+            </div>
+            <div>
+                Complete Payment before <span id="timer"></span>
+            </div>
+            <div style="display: none;" id="expiredText">
+                Payment Expired!
+            </div>
+            <div class="transaction-id">
+                Transaction Id: <%= TransactionId %>
+            </div>
+            <div class="payment-amount">
+                Currency: <%= Currency %>
+            </div>
+            <div class="payment-amount">
+                Amount Payable: <%= Amount %>
+            </div>
+            <div id="button-container">
+                <form method="POST" action="/payment/<%= TransactionId %>/pay">
+                    <button class="btn pay" type="submit">Pay</button>
+                </form>
+                <form method="POST" action="/payment/<%= TransactionId %>/cancel">
+                    <button class="btn cancel" type="submit">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let temp = parseInt('<%= ExpiresAt %>') 
+        const expiresAt = new Date(parseInt(temp));
+        const timer = document.querySelector("#timer");
+
+        const btnContainer = document.querySelector("#button-container");
+        const expiredText = document.querySelector("#expiredText");
+        const updateTimer = () => {
+            const now = new Date();
+            const diff = expiresAt - now;
+
+            if (diff <= 0) {
+                timer.innerHTML = '00:00';
+                document.querySelector('.btn.pay').disabled = true;
+                expiredText.style.display = "block";
+                btnContainer.style.display = "none"
+                return;
+            }
+
+            const minutes = Math.floor(diff / 1000 / 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            timer.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        };
+
+        setInterval(updateTimer, 1000);
+        updateTimer()
+
+    </script>
+</body>
+
+</html>

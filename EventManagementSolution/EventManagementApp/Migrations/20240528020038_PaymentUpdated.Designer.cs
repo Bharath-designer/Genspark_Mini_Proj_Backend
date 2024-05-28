@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    [Migration("20240526151630_updated")]
-    partial class updated
+    [Migration("20240528020038_PaymentUpdated")]
+    partial class PaymentUpdated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,6 +174,9 @@ namespace EventManagementApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SpecialInstructions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -325,11 +328,8 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.Transaction", b =>
                 {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -341,10 +341,13 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -381,6 +384,16 @@ namespace EventManagementApp.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            CreatedAt = new DateTime(2024, 5, 28, 7, 30, 37, 899, DateTimeKind.Local).AddTicks(938),
+                            Email = "admin@bookmyevent.in",
+                            FullName = "Book My Event",
+                            PhoneNumber = "97343792398"
+                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.UserCredential", b =>
@@ -412,6 +425,16 @@ namespace EventManagementApp.Migrations
                         .IsUnique();
 
                     b.ToTable("UserCredentials");
+
+                    b.HasData(
+                        new
+                        {
+                            UserCredentialId = 1,
+                            HashKey = new byte[] { 38, 15, 209, 59, 177, 150, 165, 54, 138, 114, 22, 239, 216, 136, 219, 15, 41, 179, 140, 121, 174, 253, 52, 40, 213, 191, 186, 133, 35, 156, 162, 142, 81, 92, 181, 32, 220, 20, 90, 39, 121, 138, 186, 217, 53, 97, 96, 193, 26, 37, 177, 168, 69, 42, 242, 67, 222, 6, 148, 159, 112, 180, 187, 116, 71, 178, 70, 202, 171, 194, 67, 56, 162, 252, 71, 71, 59, 51, 184, 190, 252, 111, 83, 87, 239, 242, 140, 47, 22, 105, 27, 183, 34, 71, 6, 70, 9, 12, 88, 220, 253, 90, 127, 37, 161, 72, 82, 104, 22, 52, 210, 176, 123, 244, 71, 221, 179, 40, 196, 101, 162, 57, 66, 128, 246, 192, 86, 123 },
+                            HashedPassword = new byte[] { 132, 172, 138, 107, 65, 221, 207, 33, 98, 143, 240, 199, 245, 60, 39, 198, 23, 20, 44, 134, 197, 113, 180, 6, 171, 11, 232, 37, 141, 48, 80, 93, 159, 180, 45, 118, 0, 200, 112, 40, 202, 222, 252, 122, 101, 97, 9, 228, 181, 182, 191, 103, 94, 37, 164, 142, 76, 99, 110, 22, 145, 111, 222, 4 },
+                            Role = "Admin",
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.ClientResponse", b =>

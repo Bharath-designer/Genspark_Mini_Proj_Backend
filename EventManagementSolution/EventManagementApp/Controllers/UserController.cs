@@ -1,5 +1,8 @@
 ﻿using EventManagementApp.DTOs.QuotationRequest;
+using EventManagementApp.DTOs.ReviewDTO;
+using EventManagementApp.DTOs.ScheduledEvent;
 using EventManagementApp.DTOs.User;
+using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -48,6 +51,10 @@ namespace EventManagementApp.Controllers
                 UserQuotationRequestDTO requests = await _userService.GetUserRequestById(UserId, id);
                 return Ok(requests);
             }
+            catch(NoQuotationRequestFoundException)
+            {
+                return NotFound("No request found for a given Id");
+            }
             catch (Exception ex)
             {
                 await Console.Out.WriteLineAsync(ex.Message);
@@ -65,6 +72,70 @@ namespace EventManagementApp.Controllers
 
                 List<UserOrderListReturnDTO> requests = await _userService.GetUserOrders(UserId);
                 return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
+        [Route("events")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserEvents()
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
+
+                List<BasicScheduledEventListDTO> requests = await _userService.GetUserEvents(UserId);
+                return Ok(requests);
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
+        [Route("order/review/{OrderId}")]
+        [HttpPost]
+        public async Task<IActionResult> ReviewAnOrder(int OrderId, [FromBody] ReviewDTO ReviewDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    var customErrorResponse = new
+                    {
+                        Title = "One or more validation errors occurred.",
+                        Errors = errors
+                    };
+
+                    return BadRequest(customErrorResponse);
+                }
+
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
+
+                await _userService.ReviewAnOrder(UserId, OrderId, ReviewDTO);
+                return Ok("Your review is added successfully");
+            }
+            catch (NoOrderFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (OrderReviewedAlreadyException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(EventNotCompletedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (PaymentNotCompletedException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
