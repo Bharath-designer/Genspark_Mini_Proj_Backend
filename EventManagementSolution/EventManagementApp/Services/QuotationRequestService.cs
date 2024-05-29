@@ -16,13 +16,18 @@ namespace EventManagementApp.Services
             _eventCategoryRepository = eventCategoryRepository;
         }
 
-        public async Task CreateQuotationRequest(int UserId, CreateQuotationRequestDTO quotationRequestDTO)
+        public async Task<int> CreateQuotationRequest(int UserId, CreateQuotationRequestDTO quotationRequestDTO)
         {
             EventCategory eventCategory = await _eventCategoryRepository.GetById(quotationRequestDTO.EventCategoryId);
 
             if (eventCategory == null)
             {
                 throw new NoEventCategoryFoundException();
+            }
+
+            if (!eventCategory.IsActive)
+            {
+                throw new EventInActiveException();
             }
 
             QuotationRequest request = new QuotationRequest();
@@ -38,6 +43,7 @@ namespace EventManagementApp.Services
             request.EventEndDate = quotationRequestDTO.EventEndDate;
 
             await _quotationRequestRepository.Add(request);
+            return request.QuotationRequestId;
         }
 
     }

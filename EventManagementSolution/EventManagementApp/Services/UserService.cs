@@ -32,9 +32,9 @@ namespace EventManagementApp.Services
             return quotationRequest;
         }
 
-        public async Task<List<UserRequestListDTO>> GetUserRequests(int userId)
+        public async Task<List<BasicQuotationRequestDTO>> GetUserRequests(int userId)
         {
-            List<UserRequestListDTO> quotationRequests = await _userRepository.GetUserRequests(userId);
+            List<BasicQuotationRequestDTO> quotationRequests = await _userRepository.GetUserRequests(userId);
             return quotationRequests;
 
         }
@@ -47,12 +47,12 @@ namespace EventManagementApp.Services
         public async Task ReviewAnOrder(int userId, int orderId, ReviewDTO reviewDTO)
         {
             Order userOrder = await _userRepository.GetUserOrder(userId, orderId);
-            
+
             if (userOrder == null)
             {
                 throw new NoOrderFoundException();
             }
-            
+
             if (userOrder.ClientResponse.Review != null)
             {
                 throw new OrderReviewedAlreadyException();
@@ -65,7 +65,7 @@ namespace EventManagementApp.Services
                 throw new PaymentNotCompletedException();
             }
 
-            if (!scheduledEvent.IsCompleted )
+            if (!scheduledEvent.IsCompleted)
             {
                 throw new EventNotCompletedException();
             }
@@ -80,6 +80,7 @@ namespace EventManagementApp.Services
                 ClientResponseId = userOrder.ClientResponseId,
                 EventCategoryId = userOrder.EventCategoryId
             };
+
             user.Reviews = new List<Review> { review };
             await _userRepository.Update(user);
 
@@ -87,7 +88,6 @@ namespace EventManagementApp.Services
 
         public async Task<List<BasicScheduledEventListDTO>> GetUserEvents(int userId)
         {
-
             List < BasicScheduledEventListDTO> scheduledEvents = await _scheduledEventRepository.GetUserScheduledEvents(userId);
             return scheduledEvents;
         }

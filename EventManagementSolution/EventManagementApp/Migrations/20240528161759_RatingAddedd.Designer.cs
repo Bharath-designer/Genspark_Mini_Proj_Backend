@@ -4,6 +4,7 @@ using EventManagementApp.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    partial class EventManagementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240528161759_RatingAddedd")]
+    partial class RatingAddedd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,9 +77,6 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<float?>("Rating")
-                        .HasColumnType("real");
-
-                    b.Property<float>("TotalRating")
                         .HasColumnType("real");
 
                     b.HasKey("EventCategoryId");
@@ -379,7 +379,7 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 28, 21, 51, 32, 299, DateTimeKind.Local).AddTicks(9367),
+                            CreatedAt = new DateTime(2024, 5, 28, 21, 47, 58, 716, DateTimeKind.Local).AddTicks(2544),
                             Email = "admin@bookmyevent.in",
                             FullName = "Book My Event",
                             PhoneNumber = "97343792398"
@@ -420,8 +420,8 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserCredentialId = 1,
-                            HashKey = new byte[] { 149, 146, 223, 155, 178, 208, 164, 249, 32, 99, 64, 178, 99, 139, 93, 144, 78, 200, 65, 145, 59, 205, 210, 155, 11, 195, 230, 174, 188, 48, 44, 38, 2, 87, 1, 172, 172, 68, 49, 125, 100, 116, 12, 115, 55, 237, 219, 134, 41, 94, 37, 85, 1, 54, 247, 248, 90, 72, 249, 75, 243, 117, 26, 155, 74, 188, 227, 88, 127, 72, 238, 32, 101, 117, 142, 69, 122, 220, 238, 155, 91, 187, 194, 130, 52, 193, 190, 120, 14, 233, 20, 22, 111, 69, 108, 135, 150, 177, 145, 227, 168, 182, 225, 158, 100, 246, 143, 19, 185, 157, 73, 61, 64, 28, 236, 73, 84, 165, 243, 0, 128, 199, 33, 135, 111, 136, 3, 110 },
-                            HashedPassword = new byte[] { 183, 83, 90, 128, 24, 25, 89, 167, 139, 1, 214, 242, 17, 221, 177, 56, 82, 154, 172, 138, 47, 128, 229, 228, 253, 16, 230, 47, 54, 60, 220, 44, 38, 46, 100, 208, 240, 27, 191, 126, 142, 38, 154, 201, 158, 54, 136, 175, 107, 99, 26, 123, 21, 26, 16, 16, 213, 191, 173, 113, 56, 249, 138, 201 },
+                            HashKey = new byte[] { 45, 181, 20, 174, 189, 152, 140, 41, 68, 221, 7, 49, 45, 175, 73, 245, 250, 116, 143, 177, 44, 179, 149, 162, 14, 248, 13, 53, 241, 102, 164, 163, 32, 158, 133, 203, 174, 180, 74, 87, 12, 86, 41, 71, 159, 221, 157, 137, 16, 81, 33, 87, 81, 61, 237, 193, 218, 150, 179, 49, 233, 86, 1, 254, 118, 50, 13, 28, 41, 179, 198, 66, 107, 208, 61, 157, 156, 140, 146, 2, 101, 85, 216, 63, 50, 231, 237, 2, 94, 119, 248, 158, 148, 135, 120, 10, 190, 57, 205, 39, 37, 205, 203, 99, 54, 77, 39, 70, 173, 236, 56, 72, 131, 127, 97, 60, 66, 160, 77, 114, 121, 11, 180, 194, 250, 171, 128, 252 },
+                            HashedPassword = new byte[] { 135, 41, 134, 137, 85, 101, 184, 217, 17, 144, 21, 217, 232, 241, 200, 170, 62, 207, 216, 10, 163, 81, 16, 168, 173, 113, 132, 10, 143, 24, 66, 187, 183, 80, 144, 233, 86, 245, 93, 73, 67, 76, 143, 2, 161, 48, 65, 114, 145, 251, 128, 63, 4, 87, 97, 195, 126, 122, 55, 156, 229, 232, 178, 171 },
                             Role = "Admin",
                             UserId = 1
                         });

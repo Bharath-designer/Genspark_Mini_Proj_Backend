@@ -35,6 +35,7 @@ namespace EventManagementApp.Repositories
                 .Select(q => new UserQuotationRequestDTO
                 {
                     QuotationRequestId = q.QuotationRequestId,
+                    EventCategory = q.EventCategory.EventName,
                     VenueType = q.VenueType,
                     LocationDetails = q.LocationDetails,
                     FoodPreference = q.FoodPreference,
@@ -64,14 +65,15 @@ namespace EventManagementApp.Repositories
             return userQuotationRequestDTO;
         }
 
-        public async Task<List<UserRequestListDTO>> GetUserRequests(int userId)
+        public async Task<List<BasicQuotationRequestDTO>> GetUserRequests(int userId)
         {
-            List<UserRequestListDTO> quotationRequest = await _context
+            List<BasicQuotationRequestDTO> quotationRequest = await _context
                 .QuotationRequests
                 .Where(q => q.UserId == userId)
-                .Select(q => new UserRequestListDTO
+                .Select(q => new BasicQuotationRequestDTO
                 {
                     QuotationRequestId = q.QuotationRequestId,
+                    EventCategory = q.EventCategory.EventName,
                     VenueType = q.VenueType,
                     LocationDetails = q.LocationDetails,
                     FoodPreference = q.FoodPreference,

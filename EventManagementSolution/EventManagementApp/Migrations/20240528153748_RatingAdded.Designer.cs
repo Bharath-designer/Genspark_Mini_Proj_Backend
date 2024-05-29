@@ -4,6 +4,7 @@ using EventManagementApp.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    partial class EventManagementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240528153748_RatingAdded")]
+    partial class RatingAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,13 +73,7 @@ namespace EventManagementApp.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NumberOfRatings")
-                        .HasColumnType("int");
-
                     b.Property<float?>("Rating")
-                        .HasColumnType("real");
-
-                    b.Property<float>("TotalRating")
                         .HasColumnType("real");
 
                     b.HasKey("EventCategoryId");
@@ -379,7 +376,7 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 28, 21, 51, 32, 299, DateTimeKind.Local).AddTicks(9367),
+                            CreatedAt = new DateTime(2024, 5, 28, 21, 7, 48, 96, DateTimeKind.Local).AddTicks(3020),
                             Email = "admin@bookmyevent.in",
                             FullName = "Book My Event",
                             PhoneNumber = "97343792398"
@@ -420,8 +417,8 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserCredentialId = 1,
-                            HashKey = new byte[] { 149, 146, 223, 155, 178, 208, 164, 249, 32, 99, 64, 178, 99, 139, 93, 144, 78, 200, 65, 145, 59, 205, 210, 155, 11, 195, 230, 174, 188, 48, 44, 38, 2, 87, 1, 172, 172, 68, 49, 125, 100, 116, 12, 115, 55, 237, 219, 134, 41, 94, 37, 85, 1, 54, 247, 248, 90, 72, 249, 75, 243, 117, 26, 155, 74, 188, 227, 88, 127, 72, 238, 32, 101, 117, 142, 69, 122, 220, 238, 155, 91, 187, 194, 130, 52, 193, 190, 120, 14, 233, 20, 22, 111, 69, 108, 135, 150, 177, 145, 227, 168, 182, 225, 158, 100, 246, 143, 19, 185, 157, 73, 61, 64, 28, 236, 73, 84, 165, 243, 0, 128, 199, 33, 135, 111, 136, 3, 110 },
-                            HashedPassword = new byte[] { 183, 83, 90, 128, 24, 25, 89, 167, 139, 1, 214, 242, 17, 221, 177, 56, 82, 154, 172, 138, 47, 128, 229, 228, 253, 16, 230, 47, 54, 60, 220, 44, 38, 46, 100, 208, 240, 27, 191, 126, 142, 38, 154, 201, 158, 54, 136, 175, 107, 99, 26, 123, 21, 26, 16, 16, 213, 191, 173, 113, 56, 249, 138, 201 },
+                            HashKey = new byte[] { 140, 181, 223, 194, 136, 214, 198, 246, 249, 221, 117, 114, 164, 82, 98, 3, 113, 16, 7, 46, 115, 75, 196, 8, 191, 103, 248, 207, 89, 50, 33, 235, 176, 25, 38, 221, 135, 155, 3, 21, 192, 4, 115, 115, 112, 216, 194, 49, 237, 58, 68, 48, 50, 131, 244, 107, 12, 173, 2, 162, 39, 64, 171, 90, 82, 112, 123, 199, 204, 108, 216, 41, 60, 81, 169, 234, 209, 7, 95, 210, 207, 70, 74, 209, 68, 34, 175, 109, 17, 79, 110, 219, 210, 27, 108, 166, 217, 18, 96, 123, 61, 25, 224, 228, 167, 31, 176, 40, 100, 16, 28, 81, 58, 208, 175, 69, 83, 84, 99, 135, 147, 229, 47, 94, 4, 92, 81, 243 },
+                            HashedPassword = new byte[] { 221, 165, 8, 203, 27, 206, 211, 100, 176, 139, 8, 116, 78, 94, 104, 171, 104, 56, 86, 108, 102, 189, 116, 229, 236, 206, 168, 70, 114, 116, 249, 23, 101, 228, 235, 94, 76, 91, 87, 100, 178, 117, 25, 138, 6, 105, 12, 191, 130, 34, 179, 161, 6, 73, 106, 119, 193, 68, 89, 70, 181, 129, 93, 142 },
                             Role = "Admin",
                             UserId = 1
                         });

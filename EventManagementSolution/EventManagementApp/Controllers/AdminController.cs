@@ -1,4 +1,5 @@
 ﻿using EventManagementApp.DTOs.EventCategory;
+using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.DTOs.ScheduledEvent;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
@@ -113,6 +114,19 @@ namespace EventManagementApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
-        
+        [HttpGet]
+        [Route("quotations")]
+        public async Task<IActionResult> GetQuotations(bool IsNew)
+        {
+            try
+            {
+                List<BasicQuotationRequestDTO> quotationRequestDTOs = await _adminService.GetQuotations(IsNew);
+                return Ok(quotationRequestDTOs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
     }
 }

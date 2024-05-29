@@ -19,7 +19,7 @@ namespace EventManagementApp.Services
 
         public async Task<List<BaseEventCategoryDTO>> GetAllEventCategories()
         {
-            var events = await _eventCategoryRepository.GetAllActiveEventCategories();
+            var events = await _eventCategoryRepository.GetAllActiveWithReviews();
             return events;
         }
     }

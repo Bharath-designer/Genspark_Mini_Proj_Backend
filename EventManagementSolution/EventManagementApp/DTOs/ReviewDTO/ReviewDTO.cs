@@ -5,7 +5,7 @@ namespace EventManagementApp.DTOs.ReviewDTO
     public class ReviewDTO
     {
         [Required]
-        [Range(1,10, ErrorMessage = "Rating should be in between 0 - 10")]
+        [Range(0,5, ErrorMessage = "Rating should be in between 0 - 5")]
         public float Rating { get; set; }
         public string Comments { get; set; }
     }

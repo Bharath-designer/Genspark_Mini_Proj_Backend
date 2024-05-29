@@ -1,10 +1,11 @@
-﻿using EventManagementApp.DTOs.EventCategory;
+﻿using System.Collections.Generic;
+using EventManagementApp.DTOs.EventCategory;
+using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.DTOs.ScheduledEvent;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
-using EventManagementApp.Repositories;
 
 namespace EventManagementApp.Services
 {
@@ -12,15 +13,18 @@ namespace EventManagementApp.Services
     {
         private readonly IEventCategoryRepository _eventCategoryRepository;
         private readonly IScheduledEventRepository _scheduledEventRepository;
+        private readonly IQuotationRequestRepository _quotationRequestRepository;
 
         public AdminService(
             IEventCategoryRepository eventCategoryRepository,
-            IScheduledEventRepository scheduledEventRepository
+            IScheduledEventRepository scheduledEventRepository,
+            IQuotationRequestRepository quotationRequestRepository
 
             )
         {
             _eventCategoryRepository = eventCategoryRepository;
             _scheduledEventRepository = scheduledEventRepository;
+            _quotationRequestRepository = quotationRequestRepository;
         }
 
         public async Task<List<AdminBaseEventCategoryDTO>> GetAllEventCategories()
@@ -37,7 +41,9 @@ namespace EventManagementApp.Services
                 })
                 .ToList();
 
-            return eventCategoryDTOs;
+            List < AdminBaseEventCategoryDTO > eventCategories = await _eventCategoryRepository.GetAllWithReviews();
+
+            return eventCategories;
         }
 
         public async Task CreateEventCategory(CreateEventCategoryDTO eventCategoryDTO)
@@ -87,6 +93,12 @@ namespace EventManagementApp.Services
             }
 
             await _eventCategoryRepository.Update(eventCategory);
+        }
+
+        public async Task<List<BasicQuotationRequestDTO>> GetQuotations(bool isNew)
+        {
+            List<BasicQuotationRequestDTO> requests = await _quotationRequestRepository.GetAllWithEventName(isNew);
+            return requests;
         }
     }
 }
