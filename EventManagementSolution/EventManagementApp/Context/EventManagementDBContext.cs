@@ -29,6 +29,36 @@ namespace EventManagementApp.Context
         public DbSet<UserCredential> UserCredentials { get; set; }
         #endregion
 
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<Review>().Where(e => e.State == EntityState.Added))
+            {
+                var review = entry.Entity;
+
+                var eventCategory = EventCategories.Find(review.EventCategoryId);
+
+                if (eventCategory != null)
+                {
+
+                    float totalRating = eventCategory.TotalRating;
+                    int numberOfReviews = eventCategory.NumberOfRatings;
+
+                    totalRating += review.Rating;
+                    numberOfReviews++;
+
+                    float newRating = (float)totalRating / numberOfReviews;
+
+                    eventCategory.Rating = newRating;
+
+                    eventCategory.TotalRating = totalRating;
+                    eventCategory.NumberOfRatings = numberOfReviews;
+                }
+            }
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

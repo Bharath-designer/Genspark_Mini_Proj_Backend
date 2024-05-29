@@ -7,8 +7,8 @@ namespace EventManagementApp.Interfaces.Service
     {
         /// <exception cref="NoScheduledEventFoundException"/>
         public Task MarkEventAsCompleted(int eventId, int userId);
-        /// <exception cref="NoScheduledEventFoundException"/>
 
+        /// <exception cref="NoScheduledEventFoundException"/>
         public Task MarkEventAsCompleted(int eventId);
     }
 }

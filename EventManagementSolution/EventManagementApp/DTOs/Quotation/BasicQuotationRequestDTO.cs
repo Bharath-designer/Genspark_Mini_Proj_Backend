@@ -2,9 +2,10 @@
 
 namespace EventManagementApp.DTOs.QuotationRequest
 {
-    public class UserRequestListDTO
+    public class BasicQuotationRequestDTO
     {
         public int QuotationRequestId { get; set; }
+        public string EventCategory { get; set; }
         public VenueType VenueType { get; set; }
         public string LocationDetails { get; set; }
         public FoodPreference FoodPreference { get; set; }

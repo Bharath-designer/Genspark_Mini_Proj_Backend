@@ -30,7 +30,7 @@ namespace EventManagementApp.Controllers
             {
                 int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
 
-                List<UserRequestListDTO> requests = await _userService.GetUserRequests(UserId);
+                List<BasicQuotationRequestDTO> requests = await _userService.GetUserRequests(UserId);
                 return Ok(requests);
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ namespace EventManagementApp.Controllers
             }
         }
 
-        [Route("order/review/{OrderId}")]
+        [Route("orders/reviews/{OrderId}")]
         [HttpPost]
         public async Task<IActionResult> ReviewAnOrder(int OrderId, [FromBody] ReviewDTO ReviewDTO)
         {

@@ -10,6 +10,9 @@ namespace EventManagementApp.Models
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsActive { get; set; }
+        public float? Rating { get; set; } = null;
+        public int NumberOfRatings { get; set; }
+        public float TotalRating { get; set; }
         public List<QuotationRequest> QuotationRequests { get; set; }
         public List<Order> Orders { get; set; }
         public List<ScheduledEvent> ScheduledEvents { get; set; }

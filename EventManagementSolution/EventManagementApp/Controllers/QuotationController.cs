@@ -1,7 +1,7 @@
 ﻿using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
-using EventManagementApp.Services;
+using EventManagementApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,12 +40,20 @@ namespace EventManagementApp.Controllers
                 }
 
                 int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
-                await _quotationRequestService.CreateQuotationRequest(UserId, createQuotationRequestDTO);
-                return StatusCode(StatusCodes.Status201Created, "Request created successfully");
+                int QuotationRequestId = await _quotationRequestService.CreateQuotationRequest(UserId, createQuotationRequestDTO);
+                return StatusCode(StatusCodes.Status201Created, new
+                {
+                    Message = "Request created successfully",
+                    QuotationRequestId
+                });
             }
             catch(NoEventCategoryFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch(EventInActiveException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -57,7 +65,7 @@ namespace EventManagementApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [Route("response")]
-        public async Task<IActionResult> CreateQuotationRequest(CreateQuotationResponseDTO createQuotationResponseDTO)
+        public async Task<IActionResult> CreateQuotationResponse(CreateQuotationResponseDTO createQuotationResponseDTO)
         {
             try
             {
@@ -73,8 +81,12 @@ namespace EventManagementApp.Controllers
                     return BadRequest(customErrorResponse);
                 }
 
-                await _quotationResponseService.CreateQuotationResponse(createQuotationResponseDTO);
-                return StatusCode(StatusCodes.Status201Created, "Quotation Responded successfully");
+                int QuotationResponseId = await _quotationResponseService.CreateQuotationResponse(createQuotationResponseDTO);
+                return StatusCode(StatusCodes.Status201Created, new
+                {
+                    Message = "Quotation Responded successfully",
+                    QuotationResponseId
+                });
             }
             catch (NoQuotationRequestFoundException ex)
             {

@@ -7,6 +7,6 @@ namespace EventManagementApp.Interfaces.Service
         /// <exception cref="NoQuotationRequestFoundException"></exception>
         /// <exception cref="QuotationAlreadyRespondedException"></exception>
         /// <exception cref="AmountNullException"></exception>
-        public Task CreateQuotationResponse(CreateQuotationResponseDTO createQuotationResponseDTO);
+        public Task<int> CreateQuotationResponse(CreateQuotationResponseDTO createQuotationResponseDTO);
     }
 }

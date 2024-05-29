@@ -16,7 +16,7 @@ namespace EventManagementApp.Services
             _quotationRequestRepository = quotationRequestRepository;
         }
 
-        public async Task CreateQuotationResponse(CreateQuotationResponseDTO createQuotationResponseDTO)
+        public async Task<int> CreateQuotationResponse(CreateQuotationResponseDTO createQuotationResponseDTO)
         {
 
             QuotationRequest quotationRequest = await _quotationRequestRepository.GetById(createQuotationResponseDTO.QuotationRequestId);
@@ -47,6 +47,7 @@ namespace EventManagementApp.Services
             quotationRequest.QuotationResponse = quotationResponse;
 
             await _quotationRequestRepository.Update(quotationRequest);
+            return quotationResponse.QuotationResponseId;
         }
     }
 }

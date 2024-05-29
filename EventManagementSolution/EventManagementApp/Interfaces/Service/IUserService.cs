@@ -9,7 +9,7 @@ namespace EventManagementApp.Interfaces.Service
 {
     public interface IUserService
     {
-        public Task<List<UserRequestListDTO>> GetUserRequests(int userId);
+        public Task<List<BasicQuotationRequestDTO>> GetUserRequests(int userId);
 
         /// <exception cref="NoQuotationRequestFoundException"></exception>
         public Task<UserQuotationRequestDTO> GetUserRequestById(int userId, int quotationRequestId);

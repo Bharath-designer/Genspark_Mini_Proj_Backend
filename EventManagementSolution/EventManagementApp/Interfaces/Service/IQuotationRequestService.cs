@@ -5,6 +5,7 @@ namespace EventManagementApp.Interfaces.Service
     public interface IQuotationRequestService
     {
         /// <exception cref="NoEventCategoryFoundException" />
-        public Task CreateQuotationRequest(int UserId, CreateQuotationRequestDTO quotationRequestDTO);
+        /// <exception cref="EventInActiveException" />
+        public Task<int> CreateQuotationRequest(int UserId, CreateQuotationRequestDTO quotationRequestDTO);
     }
 }

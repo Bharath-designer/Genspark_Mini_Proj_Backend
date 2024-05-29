@@ -1,4 +1,5 @@
 ﻿using EventManagementApp.Enums;
+using EventManagementApp.Validators;
 
 namespace EventManagementApp.DTOs.QuotationRequest
 {
@@ -10,7 +11,11 @@ namespace EventManagementApp.DTOs.QuotationRequest
         public FoodPreference FoodPreference { get; set; }
         public string? CateringInstructions { get; set; }
         public string SpecialInstructions { get; set; }
+        
+        [DateNotInPastAttribute]
         public DateTime EventStartDate { get; set; }
+
+        [DateRange("EventStartDate")]
         public DateTime EventEndDate { get; set; }
     }
 }

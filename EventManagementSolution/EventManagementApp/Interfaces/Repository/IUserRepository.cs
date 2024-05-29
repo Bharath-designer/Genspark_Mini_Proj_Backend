@@ -8,7 +8,7 @@ namespace EventManagementApp.Interfaces.Repository
     {
         public Task<User> GetUserByEmail(string email);
         public Task<User> GetUserByEmailWithUserCredential(string email);
-        public Task<List<UserRequestListDTO>> GetUserRequests(int userId);
+        public Task<List<BasicQuotationRequestDTO>> GetUserRequests(int userId);
         public Task<UserQuotationRequestDTO> GetUserRequestById(int userId, int quotationRequestId);
         public Task<List<UserOrderListReturnDTO>> GetUserOrders(int userId);
         public Task<Order> GetUserOrder(int UserId, int OrderId);
