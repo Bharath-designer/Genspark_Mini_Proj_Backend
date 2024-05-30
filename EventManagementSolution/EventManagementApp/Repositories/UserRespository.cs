@@ -50,6 +50,7 @@ namespace EventManagementApp.Repositories
                         QuotationResponseId = q.QuotationResponse.QuotationResponseId,
                         RequestStatus = q.QuotationResponse.RequestStatus,
                         QuotedAmount = q.QuotationResponse.QuotedAmount,
+                        Currency = q.QuotationResponse.Currency,
                         ResponseMessage = q.QuotationResponse.ResponseMessage,
                         ResponseDate = q.QuotationResponse.ResponseDate,
                         ClientResponse = q.QuotationResponse.ClientResponse != null ? new ClientResponseDecisionDTO
@@ -84,6 +85,7 @@ namespace EventManagementApp.Repositories
                     EventEndDate = q.EventEndDate,
                     RequestDate = q.RequestDate
                 })
+                .OrderByDescending(q => q.RequestDate)
                 .ToListAsync();
 
             return quotationRequest;
@@ -99,6 +101,7 @@ namespace EventManagementApp.Repositories
                     OrderDate = o.OrderDate,
                     OrderStatus = o.OrderStatus,
                     TotalAmount = o.TotalAmount,
+                    Currency = o.Currency,
                     EventCategory = new BaseEventCategoryDTO
                     {
                         EventCategoryId = o.EventCategory.EventCategoryId,
@@ -119,5 +122,19 @@ namespace EventManagementApp.Repositories
                 .FirstOrDefaultAsync(o=>o.OrderId == OrderId && o.UserId == UserId);
             return order;
         }
+
+        public async Task<int> GetAdminUserId()
+        {
+            var admin = await _context.UserCredentials
+                .Select(u => new
+                {
+                    u.UserId,
+                    u.Role
+                })
+                .FirstOrDefaultAsync(u=>u.Role == UserType.Admin);
+
+            return admin.UserId;
+        }
+
     }
 }

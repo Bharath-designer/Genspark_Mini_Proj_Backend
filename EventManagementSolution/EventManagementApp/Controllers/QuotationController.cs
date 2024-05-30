@@ -1,4 +1,5 @@
-﻿using EventManagementApp.DTOs.QuotationRequest;
+﻿using System.Diagnostics.CodeAnalysis;
+using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
@@ -9,6 +10,8 @@ namespace EventManagementApp.Controllers
 {
     [Route("api/quotation")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
+
     public class QuotationController: ControllerBase
     {
         private readonly IQuotationRequestService _quotationRequestService;
@@ -97,6 +100,10 @@ namespace EventManagementApp.Controllers
                 return BadRequest(ex.Message);
             }
             catch (AmountNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (CurrencyNullException ex)
             {
                 return BadRequest(ex.Message);
             }

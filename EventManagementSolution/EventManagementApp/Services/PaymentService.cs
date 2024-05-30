@@ -4,12 +4,12 @@ using EventManagementApp.Context;
 using EventManagementApp.DTOs.Payment;
 using EventManagementApp.Enums;
 using EventManagementApp.Exceptions;
-using EventManagementApp.Interfaces;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
 using EventManagementApp.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 
 namespace EventManagementApp.Services
@@ -36,14 +36,14 @@ namespace EventManagementApp.Services
             _scheduledEventRepository = scheduledEventRepository;
             _context = context;
 
-            var api_key = configuration.GetSection("PaymentCredentials").GetSection("API_KEY").Value;
+            string api_key = configuration.GetSection("PaymentCredentials:API_KEY").Value;
             PAYMENT_API_KEY = api_key != null ? api_key.ToString() : throw new NullReferenceException("Cannot get Payment API_KEY from Configuration file");
 
-            var value = configuration.GetSection("PaymentCredentials").GetSection("PaymentURL").Value;
+            string value = configuration.GetSection("PaymentCredentials:PAYMENT_URL").Value;
             PAYMENT_URL = value != null ? value.ToString() : throw new NullReferenceException("Cannot get Payment URL from Configuration file");
 
             var WebHookSecretKey = configuration.GetSection("WebhookCredentials").GetSection("KEY").Value;
-            WEBHOOK_SECRET_KEY = WebHookSecretKey != null ? WebHookSecretKey.ToString() : throw new NullReferenceException("Cannot get Payment URL from Configuration file");
+            WEBHOOK_SECRET_KEY = WebHookSecretKey != null ? WebHookSecretKey.ToString() : throw new NullReferenceException("Cannot get Webhook credentials from Configuration file");
 
         }
 
@@ -66,7 +66,7 @@ namespace EventManagementApp.Services
             var paymentData = new
             {
                 Amount = userOrder.TotalAmount,
-                Currency = "INR"
+                Currency = userOrder.Currency.ToString()
             };
 
             var jsonPayload = JsonSerializer.Serialize(paymentData);
@@ -95,6 +95,7 @@ namespace EventManagementApp.Services
             Transaction transaction = new Transaction
             {
                 Amount = userOrder.TotalAmount,
+                Currency = userOrder.Currency,
                 PaymentURL = paymentResult.PaymentURL,
                 TransactionId = paymentResult.TransactionId
             };
@@ -153,7 +154,7 @@ namespace EventManagementApp.Services
                 catch (Exception ex)
                 {
                     await DBTransaction.RollbackAsync();
-                    throw ex;
+                    throw;
                 }
             }
         }

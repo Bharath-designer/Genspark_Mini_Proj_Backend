@@ -10,6 +10,7 @@ namespace EventManagementApp.Models
         public int QuotationRequestId { get; set; } // Foreign Key
         public RequestStatus RequestStatus { get; set; }
         public double? QuotedAmount { get; set; }
+        public Currency? Currency { get; set; }
         public string ResponseMessage { get; set; }
         public DateTime ResponseDate { get; set; } = DateTime.Now;
         public QuotationRequest QuotationRequest { get; set; }

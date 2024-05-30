@@ -3,7 +3,6 @@ using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
-using EventManagementApp.Repositories;
 
 namespace EventManagementApp.Services
 {

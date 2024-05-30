@@ -1,4 +1,5 @@
-﻿using EventManagementApp.DTOs.QuotationRequest;
+﻿using System.Diagnostics.CodeAnalysis;
+using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.DTOs.ReviewDTO;
 using EventManagementApp.DTOs.ScheduledEvent;
 using EventManagementApp.DTOs.User;
@@ -13,6 +14,8 @@ namespace EventManagementApp.Controllers
     [Route("api/user/")]
     [ApiController]
     [Authorize(Roles = "User")]
+    [ExcludeFromCodeCoverage]
+
     public class UserController: ControllerBase
     {
         private readonly IUserService _userService;

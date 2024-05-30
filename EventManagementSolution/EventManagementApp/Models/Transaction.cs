@@ -9,6 +9,7 @@ namespace EventManagementApp.Models
         public string TransactionId { get; set; }
         public int OrderId { get; set; } // Foreign Key
         public double Amount { get; set; }
+        public Currency Currency { get; set; }
         public string PaymentURL { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.Now;
         public PaymentStatus PaymentStatus { get; set; }

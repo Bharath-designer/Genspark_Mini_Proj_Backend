@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using EventManagementApp.Enums;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
@@ -9,6 +10,8 @@ namespace EventManagementApp.Controllers
 {
     [Route("api/user/event")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
+
     public class ScheduledEventController : ControllerBase
     {
         private readonly IScheduledEventService _scheduledEventService;

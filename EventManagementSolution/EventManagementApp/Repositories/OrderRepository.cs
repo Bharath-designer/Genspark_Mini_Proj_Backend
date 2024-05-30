@@ -1,5 +1,5 @@
 ﻿using EventManagementApp.Context;
-using EventManagementApp.Interfaces;
+using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Models;
 using Microsoft.EntityFrameworkCore;
 
