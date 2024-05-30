@@ -46,6 +46,7 @@ namespace EventManagementApp.Services
                     EventCategoryId = quotationResponse.QuotationRequest.EventCategoryId,
                     UserId = quotationResponse.QuotationRequest.UserId,
                     TotalAmount = (double) quotationResponse.QuotedAmount,
+                    Currency = (Currency)quotationResponse.Currency,
                     OrderStatus = OrderStatus.Pending
 
                 };

@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using EventManagementApp.Context;
-using EventManagementApp.Interfaces;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Repositories;
@@ -56,7 +55,7 @@ namespace EventManagementApp
 
             #region Services
             builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
-            builder.Services.AddScoped(typeof(TokenService));
+            builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
             builder.Services.AddScoped(typeof(IEventCategoryService), typeof(EventCategoryService));
             builder.Services.AddScoped(typeof(IQuotationRequestService), typeof(QuotationRequestService));
             builder.Services.AddScoped(typeof(IQuotationResponseService), typeof(QuotationResponseService));
@@ -65,6 +64,7 @@ namespace EventManagementApp
             builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             builder.Services.AddScoped(typeof(IAdminService), typeof(AdminService));
             builder.Services.AddScoped(typeof(IScheduledEventService), typeof(SchedulesEventService));
+            builder.Services.AddScoped(typeof(INotificationService), typeof(NotificationService));
 
 
             #endregion
@@ -74,10 +74,10 @@ namespace EventManagementApp
             builder.Services.AddScoped(typeof(IEventCategoryRepository), typeof(EventCategoryRepository));  
             builder.Services.AddScoped(typeof(IQuotationRequestRepository), typeof(QuotationRequestRepository));
             builder.Services.AddScoped(typeof(IQuotationResponseRepository), typeof(QuotationResponseRepository));
-            builder.Services.AddScoped(typeof(IClientResponseRepository), typeof(ClientResponseRepository));
             builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
             builder.Services.AddScoped(typeof(ITransactionRepository), typeof(TransactionRepository));
             builder.Services.AddScoped(typeof(IScheduledEventRepository), typeof(ScheduledEventRepository));
+            builder.Services.AddScoped(typeof(INotificationRepository), typeof(NotificationRepository));
 
             #endregion
 

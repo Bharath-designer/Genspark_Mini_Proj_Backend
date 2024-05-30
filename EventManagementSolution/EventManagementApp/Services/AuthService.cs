@@ -12,9 +12,9 @@ namespace EventManagementApp.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(IUserRepository userRepository, TokenService tokenService) { 
+        public AuthService(IUserRepository userRepository, ITokenService tokenService) { 
             _userRepository = userRepository;
             _tokenService = tokenService;
         }
@@ -25,12 +25,10 @@ namespace EventManagementApp.Services
             if (existingUser != null) {
                 throw new EmailAlreadyExistsException();
             }
-
             User user = MapRegisterDTOWithUser(registerDTO);
             await _userRepository.Add(user);
 
         }
-
         private User MapRegisterDTOWithUser(RegisterDTO registerDTO)
         {
             User user = new User();
@@ -40,7 +38,6 @@ namespace EventManagementApp.Services
             user.UserCredential = CreateUserCredential(registerDTO.Password);
             return user;
         }
-
         private UserCredential CreateUserCredential(string plainPassword)
         {
             UserCredential credential = new UserCredential();
@@ -60,7 +57,6 @@ namespace EventManagementApp.Services
             {
                 throw new InvalidEmailOrPasswordException();
             }
-
             HMACSHA512 hMACSHA = new HMACSHA512(storedUser.UserCredential.HashKey);
             var encrypterPass = hMACSHA.ComputeHash(Encoding.UTF8.GetBytes(loginDTO.Password));
 

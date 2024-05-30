@@ -7,6 +7,7 @@ namespace EventManagementApp.DTOs.User
     {
         public int OrderId { get; set; }
         public double TotalAmount { get; set; }
+        public Currency Currency { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public DateTime OrderDate { get; set; }
         public BaseEventCategoryDTO EventCategory { get; set; }

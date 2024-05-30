@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementApp.Migrations
 {
     [DbContext(typeof(EventManagementDBContext))]
-    [Migration("20240528064726_EventStatusUpdated")]
-    partial class EventStatusUpdated
+    [Migration("20240530040427_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,8 +70,17 @@ namespace EventManagementApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int>("NumberOfRatings")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Rating")
+                        .HasColumnType("real");
+
+                    b.Property<float>("TotalRating")
+                        .HasColumnType("real");
 
                     b.HasKey("EventCategoryId");
 
@@ -86,6 +95,9 @@ namespace EventManagementApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -93,11 +105,11 @@ namespace EventManagementApp.Migrations
                     b.Property<DateTime>("NotificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SourceURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("isRead")
-                        .HasColumnType("bit");
 
                     b.HasKey("NotificationId");
 
@@ -116,6 +128,10 @@ namespace EventManagementApp.Migrations
 
                     b.Property<int>("ClientResponseId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
@@ -207,6 +223,9 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuotationResponseId"));
+
+                    b.Property<int?>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuotationRequestId")
                         .HasColumnType("int");
@@ -314,6 +333,9 @@ namespace EventManagementApp.Migrations
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("QuotationRequestId")
                         .HasColumnType("int");
 
@@ -342,6 +364,10 @@ namespace EventManagementApp.Migrations
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -398,7 +424,7 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 28, 12, 17, 25, 110, DateTimeKind.Local).AddTicks(8672),
+                            CreatedAt = new DateTime(2024, 5, 30, 9, 34, 27, 95, DateTimeKind.Local).AddTicks(666),
                             Email = "admin@bookmyevent.in",
                             FullName = "Book My Event",
                             PhoneNumber = "97343792398"
@@ -439,8 +465,8 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserCredentialId = 1,
-                            HashKey = new byte[] { 185, 244, 168, 243, 162, 141, 59, 183, 7, 158, 233, 130, 61, 26, 215, 33, 172, 115, 76, 165, 116, 154, 87, 113, 50, 15, 222, 82, 207, 213, 165, 68, 128, 202, 82, 173, 39, 219, 172, 41, 134, 181, 50, 48, 26, 207, 253, 48, 0, 131, 239, 84, 214, 114, 125, 159, 150, 136, 30, 14, 162, 121, 207, 152, 186, 230, 247, 126, 200, 51, 134, 100, 23, 180, 149, 84, 73, 124, 13, 69, 167, 254, 77, 24, 176, 60, 52, 254, 53, 236, 141, 133, 102, 234, 26, 34, 30, 152, 138, 164, 121, 153, 240, 206, 181, 1, 94, 162, 116, 55, 187, 26, 232, 8, 166, 204, 127, 112, 14, 111, 227, 4, 179, 236, 67, 88, 246, 113 },
-                            HashedPassword = new byte[] { 55, 214, 159, 120, 168, 13, 128, 47, 136, 13, 0, 217, 203, 137, 177, 42, 27, 218, 153, 119, 43, 98, 24, 134, 17, 233, 79, 46, 172, 252, 225, 62, 200, 210, 189, 100, 146, 143, 193, 201, 79, 247, 156, 189, 122, 0, 239, 41, 89, 89, 54, 168, 186, 113, 237, 147, 253, 153, 66, 85, 133, 226, 195, 70 },
+                            HashKey = new byte[] { 220, 34, 91, 64, 190, 183, 116, 58, 73, 76, 160, 169, 219, 74, 219, 185, 155, 212, 207, 22, 100, 19, 75, 251, 103, 168, 75, 228, 137, 243, 33, 36, 155, 52, 148, 22, 255, 176, 8, 141, 75, 157, 17, 203, 233, 129, 9, 62, 85, 122, 242, 160, 143, 16, 144, 198, 74, 83, 65, 224, 107, 33, 162, 110, 211, 43, 138, 126, 199, 241, 164, 199, 20, 230, 15, 129, 44, 140, 2, 109, 159, 229, 31, 193, 210, 88, 220, 25, 39, 234, 148, 246, 46, 93, 79, 66, 59, 0, 90, 169, 165, 213, 80, 121, 159, 162, 199, 235, 116, 148, 92, 65, 193, 226, 18, 160, 198, 57, 124, 164, 19, 66, 33, 183, 165, 220, 119, 19 },
+                            HashedPassword = new byte[] { 239, 13, 48, 188, 146, 37, 159, 21, 2, 103, 162, 147, 43, 143, 4, 221, 123, 238, 58, 140, 216, 143, 41, 29, 38, 226, 140, 89, 2, 150, 151, 197, 67, 244, 138, 166, 151, 102, 36, 2, 131, 17, 140, 212, 169, 74, 18, 80, 111, 78, 179, 172, 242, 235, 241, 40, 195, 122, 105, 164, 244, 190, 33, 11 },
                             Role = "Admin",
                             UserId = 1
                         });

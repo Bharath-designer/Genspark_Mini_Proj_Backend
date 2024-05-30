@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EventManagementApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,11 @@ namespace EventManagementApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Rating = table.Column<float>(type: "real", nullable: true),
+                    NumberOfRatings = table.Column<int>(type: "int", nullable: false),
+                    TotalRating = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +54,9 @@ namespace EventManagementApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SourceURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NotificationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    isRead = table.Column<bool>(type: "bit", nullable: false)
+                    IsRead = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,6 +135,7 @@ namespace EventManagementApp.Migrations
                     QuotationRequestId = table.Column<int>(type: "int", nullable: false),
                     RequestStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuotedAmount = table.Column<double>(type: "float", nullable: true),
+                    Currency = table.Column<int>(type: "int", nullable: true),
                     ResponseMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ResponseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -175,6 +181,7 @@ namespace EventManagementApp.Migrations
                     ClientResponseId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     TotalAmount = table.Column<double>(type: "float", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -245,6 +252,8 @@ namespace EventManagementApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventCategoryId = table.Column<int>(type: "int", nullable: false),
                     ClienResponseId = table.Column<int>(type: "int", nullable: false),
+                    QuotationRequestId = table.Column<int>(type: "int", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -261,6 +270,12 @@ namespace EventManagementApp.Migrations
                         column: x => x.EventCategoryId,
                         principalTable: "EventCategories",
                         principalColumn: "EventCategoryId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ScheduledEvents_QuotationRequests_QuotationRequestId",
+                        column: x => x.QuotationRequestId,
+                        principalTable: "QuotationRequests",
+                        principalColumn: "QuotationRequestId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ScheduledEvents_Users_UserId",
@@ -299,10 +314,11 @@ namespace EventManagementApp.Migrations
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -318,12 +334,12 @@ namespace EventManagementApp.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "CreatedAt", "Email", "FullName", "PhoneNumber" },
-                values: new object[] { 1, new DateTime(2024, 5, 28, 7, 2, 36, 802, DateTimeKind.Local).AddTicks(215), "admin@bookmyevent.in", "Book My Event", "97343792398" });
+                values: new object[] { 1, new DateTime(2024, 5, 30, 9, 34, 27, 95, DateTimeKind.Local).AddTicks(666), "admin@bookmyevent.in", "Book My Event", "97343792398" });
 
             migrationBuilder.InsertData(
                 table: "UserCredentials",
                 columns: new[] { "UserCredentialId", "HashKey", "HashedPassword", "Role", "UserId" },
-                values: new object[] { 1, new byte[] { 195, 208, 95, 32, 94, 143, 206, 151, 208, 110, 42, 238, 102, 151, 194, 56, 148, 192, 188, 89, 233, 191, 191, 183, 239, 191, 111, 202, 59, 155, 238, 67, 164, 218, 140, 37, 83, 96, 128, 105, 7, 124, 25, 79, 123, 221, 39, 65, 56, 194, 17, 213, 169, 77, 50, 231, 90, 39, 83, 29, 189, 128, 151, 246, 119, 146, 70, 92, 143, 177, 219, 119, 62, 163, 245, 165, 132, 177, 184, 28, 100, 145, 203, 57, 191, 122, 249, 235, 196, 246, 107, 213, 198, 195, 104, 89, 215, 200, 60, 187, 42, 151, 66, 80, 72, 45, 1, 27, 102, 218, 120, 133, 110, 163, 179, 157, 38, 82, 149, 108, 204, 167, 48, 194, 190, 204, 32, 124 }, new byte[] { 45, 116, 149, 207, 144, 8, 108, 159, 157, 97, 14, 16, 54, 23, 33, 117, 126, 199, 86, 66, 25, 150, 53, 156, 33, 31, 29, 35, 90, 178, 187, 49, 190, 162, 238, 107, 174, 50, 133, 14, 39, 204, 138, 208, 26, 227, 230, 195, 123, 242, 114, 212, 253, 245, 83, 118, 202, 222, 54, 134, 56, 115, 101, 75 }, "Admin", 1 });
+                values: new object[] { 1, new byte[] { 220, 34, 91, 64, 190, 183, 116, 58, 73, 76, 160, 169, 219, 74, 219, 185, 155, 212, 207, 22, 100, 19, 75, 251, 103, 168, 75, 228, 137, 243, 33, 36, 155, 52, 148, 22, 255, 176, 8, 141, 75, 157, 17, 203, 233, 129, 9, 62, 85, 122, 242, 160, 143, 16, 144, 198, 74, 83, 65, 224, 107, 33, 162, 110, 211, 43, 138, 126, 199, 241, 164, 199, 20, 230, 15, 129, 44, 140, 2, 109, 159, 229, 31, 193, 210, 88, 220, 25, 39, 234, 148, 246, 46, 93, 79, 66, 59, 0, 90, 169, 165, 213, 80, 121, 159, 162, 199, 235, 116, 148, 92, 65, 193, 226, 18, 160, 198, 57, 124, 164, 19, 66, 33, 183, 165, 220, 119, 19 }, new byte[] { 239, 13, 48, 188, 146, 37, 159, 21, 2, 103, 162, 147, 43, 143, 4, 221, 123, 238, 58, 140, 216, 143, 41, 29, 38, 226, 140, 89, 2, 150, 151, 197, 67, 244, 138, 166, 151, 102, 36, 2, 131, 17, 140, 212, 169, 74, 18, 80, 111, 78, 179, 172, 242, 235, 241, 40, 195, 122, 105, 164, 244, 190, 33, 11 }, "Admin", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientResponses_QuotationResponseId",
@@ -399,6 +415,12 @@ namespace EventManagementApp.Migrations
                 name: "IX_ScheduledEvents_EventCategoryId",
                 table: "ScheduledEvents",
                 column: "EventCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScheduledEvents_QuotationRequestId",
+                table: "ScheduledEvents",
+                column: "QuotationRequestId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScheduledEvents_UserId",

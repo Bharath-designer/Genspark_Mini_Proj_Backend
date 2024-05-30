@@ -1,4 +1,5 @@
-﻿using EventManagementApp.DTOs.ClientResponse;
+﻿using System.Diagnostics.CodeAnalysis;
+using EventManagementApp.DTOs.ClientResponse;
 using EventManagementApp.Enums;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
@@ -11,6 +12,8 @@ namespace EventManagementApp.Controllers
     [Route("api/user/response")]
     [ApiController]
     [Authorize(Roles = "User")]
+    [ExcludeFromCodeCoverage]
+
     public class ClientResponseController : ControllerBase
     {
         private readonly IClientResponseService _clientResponseService;

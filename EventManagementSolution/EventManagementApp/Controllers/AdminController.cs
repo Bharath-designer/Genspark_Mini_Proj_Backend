@@ -1,4 +1,5 @@
-﻿using EventManagementApp.DTOs.EventCategory;
+﻿using System.Diagnostics.CodeAnalysis;
+using EventManagementApp.DTOs.EventCategory;
 using EventManagementApp.DTOs.QuotationRequest;
 using EventManagementApp.DTOs.ScheduledEvent;
 using EventManagementApp.Exceptions;
@@ -6,11 +7,13 @@ using EventManagementApp.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace EventManagementApp.Controllers
 {
     [Route("api/admin")]
     [ApiController]
     [Authorize(Roles = "Admin")]
+    [ExcludeFromCodeCoverage]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -106,7 +109,7 @@ namespace EventManagementApp.Controllers
             }
             catch(NullReferenceException ex)
             {
-                return BadRequest("EventName or Description is required");
+                return BadRequest("EventName or Description or IsActive is required");
             }
             catch(Exception ex)
             {

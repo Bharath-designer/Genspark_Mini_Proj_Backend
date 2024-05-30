@@ -84,6 +84,37 @@ namespace EventManagementApp.Migrations
                     b.ToTable("EventCategories");
                 });
 
+            modelBuilder.Entity("EventManagementApp.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NotificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SourceURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("EventManagementApp.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -94,6 +125,10 @@ namespace EventManagementApp.Migrations
 
                     b.Property<int>("ClientResponseId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
@@ -185,6 +220,9 @@ namespace EventManagementApp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuotationResponseId"));
+
+                    b.Property<int?>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuotationRequestId")
                         .HasColumnType("int");
@@ -324,6 +362,10 @@ namespace EventManagementApp.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -379,7 +421,7 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 5, 28, 21, 51, 32, 299, DateTimeKind.Local).AddTicks(9367),
+                            CreatedAt = new DateTime(2024, 5, 30, 9, 34, 27, 95, DateTimeKind.Local).AddTicks(666),
                             Email = "admin@bookmyevent.in",
                             FullName = "Book My Event",
                             PhoneNumber = "97343792398"
@@ -420,8 +462,8 @@ namespace EventManagementApp.Migrations
                         new
                         {
                             UserCredentialId = 1,
-                            HashKey = new byte[] { 149, 146, 223, 155, 178, 208, 164, 249, 32, 99, 64, 178, 99, 139, 93, 144, 78, 200, 65, 145, 59, 205, 210, 155, 11, 195, 230, 174, 188, 48, 44, 38, 2, 87, 1, 172, 172, 68, 49, 125, 100, 116, 12, 115, 55, 237, 219, 134, 41, 94, 37, 85, 1, 54, 247, 248, 90, 72, 249, 75, 243, 117, 26, 155, 74, 188, 227, 88, 127, 72, 238, 32, 101, 117, 142, 69, 122, 220, 238, 155, 91, 187, 194, 130, 52, 193, 190, 120, 14, 233, 20, 22, 111, 69, 108, 135, 150, 177, 145, 227, 168, 182, 225, 158, 100, 246, 143, 19, 185, 157, 73, 61, 64, 28, 236, 73, 84, 165, 243, 0, 128, 199, 33, 135, 111, 136, 3, 110 },
-                            HashedPassword = new byte[] { 183, 83, 90, 128, 24, 25, 89, 167, 139, 1, 214, 242, 17, 221, 177, 56, 82, 154, 172, 138, 47, 128, 229, 228, 253, 16, 230, 47, 54, 60, 220, 44, 38, 46, 100, 208, 240, 27, 191, 126, 142, 38, 154, 201, 158, 54, 136, 175, 107, 99, 26, 123, 21, 26, 16, 16, 213, 191, 173, 113, 56, 249, 138, 201 },
+                            HashKey = new byte[] { 220, 34, 91, 64, 190, 183, 116, 58, 73, 76, 160, 169, 219, 74, 219, 185, 155, 212, 207, 22, 100, 19, 75, 251, 103, 168, 75, 228, 137, 243, 33, 36, 155, 52, 148, 22, 255, 176, 8, 141, 75, 157, 17, 203, 233, 129, 9, 62, 85, 122, 242, 160, 143, 16, 144, 198, 74, 83, 65, 224, 107, 33, 162, 110, 211, 43, 138, 126, 199, 241, 164, 199, 20, 230, 15, 129, 44, 140, 2, 109, 159, 229, 31, 193, 210, 88, 220, 25, 39, 234, 148, 246, 46, 93, 79, 66, 59, 0, 90, 169, 165, 213, 80, 121, 159, 162, 199, 235, 116, 148, 92, 65, 193, 226, 18, 160, 198, 57, 124, 164, 19, 66, 33, 183, 165, 220, 119, 19 },
+                            HashedPassword = new byte[] { 239, 13, 48, 188, 146, 37, 159, 21, 2, 103, 162, 147, 43, 143, 4, 221, 123, 238, 58, 140, 216, 143, 41, 29, 38, 226, 140, 89, 2, 150, 151, 197, 67, 244, 138, 166, 151, 102, 36, 2, 131, 17, 140, 212, 169, 74, 18, 80, 111, 78, 179, 172, 242, 235, 241, 40, 195, 122, 105, 164, 244, 190, 33, 11 },
                             Role = "Admin",
                             UserId = 1
                         });
@@ -436,6 +478,17 @@ namespace EventManagementApp.Migrations
                         .IsRequired();
 
                     b.Navigation("QuotationResponse");
+                });
+
+            modelBuilder.Entity("EventManagementApp.Models.Notification", b =>
+                {
+                    b.HasOne("EventManagementApp.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventManagementApp.Models.Order", b =>
@@ -631,6 +684,8 @@ namespace EventManagementApp.Migrations
 
             modelBuilder.Entity("EventManagementApp.Models.User", b =>
                 {
+                    b.Navigation("Notifications");
+
                     b.Navigation("Orders");
 
                     b.Navigation("QuotationRequests");

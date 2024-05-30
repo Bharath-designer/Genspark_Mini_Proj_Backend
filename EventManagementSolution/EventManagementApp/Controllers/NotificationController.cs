@@ -1,34 +1,32 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EventManagementApp.DTOs.User;
+﻿using EventManagementApp.DTOs.NotificationDTOs;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
+using EventManagementApp.Models;
 using EventManagementApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EventManagementApp.Controllers
 {
-    [Route("api/")]
+
+    [Route("api/notifications")]
     [ApiController]
-    [AllowAnonymous]
     [ExcludeFromCodeCoverage]
-
-    public class AuthController : ControllerBase
+    public class NotificationController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly INotificationService _notificationService;
 
-        public AuthController(IAuthService authService)
+        public NotificationController(INotificationService notificationService)
         {
-            _authService = authService;
+            _notificationService = notificationService;
         }
 
-        [Route("register")]
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
+        [HttpGet]
+        public async Task<IActionResult> GetAllNotifications()
         {
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
@@ -41,33 +39,28 @@ namespace EventManagementApp.Controllers
                     return BadRequest(customErrorResponse);
                 }
 
-                await _authService.AddUser(registerDTO);
-                return StatusCode(StatusCodes.Status201Created, "User created successfully");
-            }
-            catch (EmailAlreadyExistsException eafe)
-            {
-                return BadRequest(eafe.Message);
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
+
+                var notifications = await _notificationService.GetAllNotifications(UserId);
+                return Ok(notifications);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
-
         }
 
-        [Route("login")]
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+        [HttpGet]
+        [Route("{notificationId}")]
+        public async Task<IActionResult> GetAllNotificationById(int notificationId)
         {
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                     var customErrorResponse = new
                     {
-                        Status = 400,
                         Title = "One or more validation errors occurred.",
                         Errors = errors
                     };
@@ -75,21 +68,19 @@ namespace EventManagementApp.Controllers
                     return BadRequest(customErrorResponse);
                 }
 
-                LoginReturnDTO loginReturn = await _authService.Login(loginDTO);
+                int UserId = int.Parse(User.FindFirst("userId").Value.ToString());
 
-                return Ok(loginReturn);
-
+                NotificationReturnDTO notifications = await _notificationService.GetNotificationById(UserId, notificationId);
+                return Ok(notifications);
             }
-            catch (InvalidEmailOrPasswordException ex)
+            catch (NoNotificationFoundException ex)
             {
-                return Unauthorized(ex.Message);
+                return BadRequest(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
-
-
     }
 }

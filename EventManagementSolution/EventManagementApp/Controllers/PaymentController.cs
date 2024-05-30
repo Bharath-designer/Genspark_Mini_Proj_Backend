@@ -1,4 +1,5 @@
-﻿using EventManagementApp.DTOs.Payment;
+﻿using System.Diagnostics.CodeAnalysis;
+using EventManagementApp.DTOs.Payment;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,8 @@ namespace EventManagementApp.Controllers
 {
     [Route("api/payment")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
+
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;

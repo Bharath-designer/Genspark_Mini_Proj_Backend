@@ -10,6 +10,7 @@ namespace EventManagementApp.Interfaces.Service
         public Task CreateEventCategory(CreateEventCategoryDTO eventCategoryDTO);
         public Task<List<AdminScheduledEventListDTO>> GetScheduledEvents();
         /// <exception cref="NoEventCategoryFoundException"/>
+        /// <exception cref="NullReferenceException"/>
         public Task UpdateEventDetails(int id, UpdateEventCategoryDTO updateEventCategoryDTO);
         public Task<List<AdminBaseEventCategoryDTO>> GetAllEventCategories();
         Task<List<BasicQuotationRequestDTO>> GetQuotations(bool isNew);

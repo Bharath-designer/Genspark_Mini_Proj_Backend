@@ -1,4 +1,5 @@
-﻿using EventManagementApp.Models;
+﻿using EventManagementApp.Interfaces.Service;
+using EventManagementApp.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace EventManagementApp.Services
 {
-    public class TokenService
+    public class TokenService:ITokenService
     {
         private readonly SymmetricSecurityKey _key;
 

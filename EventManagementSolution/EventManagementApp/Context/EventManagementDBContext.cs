@@ -10,6 +10,8 @@ namespace EventManagementApp.Context
     {
         public EventManagementDBContext(DbContextOptions options) : base(options) { }
 
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -21,6 +23,7 @@ namespace EventManagementApp.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<QuotationRequest> QuotationRequests { get; set; }
         public DbSet<QuotationResponse> QuotationResponses { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Refund> Refunds { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ScheduledEvent> ScheduledEvents { get; set; }
@@ -162,6 +165,12 @@ namespace EventManagementApp.Context
                 .HasOne(u=>u.User)
                 .WithOne(u=>u.UserCredential)
                 .HasForeignKey<UserCredential>(u=>u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(n=>n.User)
+                .WithMany(u=>u.Notifications)
+                .HasForeignKey(u=>u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // For converting enum to string (int by default)
