@@ -1,4 +1,5 @@
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json.Serialization;
 using EventManagementApp.Context;
@@ -13,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EventManagementApp
 {
+    [ExcludeFromCodeCoverage]
     public class Program
     {
         public static void Main(string[] args)
@@ -52,6 +54,8 @@ namespace EventManagementApp
             builder.Services.AddDbContext<EventManagementDBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("default"))
             );
+
+            //builder.Services.AddLogging(l => l.AddLog4Net());
 
             #region Services
             builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));

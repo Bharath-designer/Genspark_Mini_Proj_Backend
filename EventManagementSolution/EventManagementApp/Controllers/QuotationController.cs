@@ -17,7 +17,9 @@ namespace EventManagementApp.Controllers
         private readonly IQuotationRequestService _quotationRequestService;
         private readonly IQuotationResponseService _quotationResponseService;
 
-        public QuotationController(IQuotationRequestService quotationRequestService, IQuotationResponseService quotationResponseService) 
+        public QuotationController(IQuotationRequestService quotationRequestService, 
+            IQuotationResponseService quotationResponseService
+            ) 
         {
             _quotationRequestService = quotationRequestService;
             _quotationResponseService = quotationResponseService;

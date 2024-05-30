@@ -10,7 +10,6 @@ namespace EventManagementApp.Controllers
     [Route("api/payment")]
     [ApiController]
     [ExcludeFromCodeCoverage]
-
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;

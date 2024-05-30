@@ -173,6 +173,20 @@ namespace EventManagementApp.Context
                 .HasForeignKey(u=>u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Refund>()
+                .HasOne(r => r.Order)
+                .WithMany(o => o.Refunds)
+                .HasForeignKey(r => r.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Refund>()
+                .HasOne(r => r.Transaction)
+                .WithOne(t => t.Refund)
+                .HasForeignKey<Refund>(r => r.TransactionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
             // For converting enum to string (int by default)
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

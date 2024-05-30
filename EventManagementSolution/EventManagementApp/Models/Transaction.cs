@@ -15,5 +15,6 @@ namespace EventManagementApp.Models
         public PaymentStatus PaymentStatus { get; set; }
         public string? PaymentMethod {  get; set; }
         public Order Order { get; set; }
+        public Refund Refund { get; set; }
     }
 }

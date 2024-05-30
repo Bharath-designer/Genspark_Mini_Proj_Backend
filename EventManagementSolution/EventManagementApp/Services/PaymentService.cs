@@ -127,6 +127,21 @@ namespace EventManagementApp.Services
                 throw new NoTransactionFoundException();
             }
 
+            if (transaction.Order.OrderStatus == OrderStatus.Completed)
+            {
+                Order paidOrder = transaction.Order;
+                var refund = new Refund
+                {
+                    RefundAmount = paidOrder.TotalAmount,
+                    Currency = paidOrder.Currency,
+                    Reason = "Payment Already Completed",
+                    TransactionId = transaction.TransactionId
+                };
+                paidOrder.Refunds = new List<Refund> { refund };
+                await _orderRepository.Update(paidOrder);
+                return;
+            }
+
             using (var DBTransaction = await _context.Database.BeginTransactionAsync())
             {
                 try
