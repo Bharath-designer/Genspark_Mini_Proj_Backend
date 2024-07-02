@@ -76,5 +76,21 @@ namespace EventManagementApp.Repositories
 
             return eventCategories;
         }
+
+        public async Task<List<UserReviewDTO>> TopReviews()
+        {
+            List<UserReviewDTO> topReviews = await _context.Reviews
+                .Select(review=> new UserReviewDTO
+                {
+                    Comments=review.Comments,
+                    Rating=review.Rating,
+                    UserName = review.User.FullName
+                })
+                .OrderByDescending(review=> review.Rating)
+                .Take(5)
+                .ToListAsync();
+
+            return topReviews;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using EventManagementApp.DTOs.EventCategory;
+using EventManagementApp.DTOs.ReviewDTO;
 using EventManagementApp.Interfaces.Repository;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Models;
@@ -22,5 +23,12 @@ namespace EventManagementApp.Services
             var events = await _eventCategoryRepository.GetAllActiveWithReviews();
             return events;
         }
+
+        public async Task<List<UserReviewDTO>> GetTopReviews()
+        {
+            var events = await _eventCategoryRepository.TopReviews();
+            return events;
+        }
+
     }
 }

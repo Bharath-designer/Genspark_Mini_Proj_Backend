@@ -15,7 +15,7 @@ const _database = {
             PaymentStatus: "PENDING",
             Amount: 3211,
             Currency: "INR",
-            ExpiresAt: "1716851013000"
+            ExpiresAt: "1716851013000"  
         }
     }
 }
@@ -46,7 +46,7 @@ app.post("/session", authenticationMiddleware, (req, res) => {
     _database.transactions[transactionId] = temp
     return res.json({
         TransactionId: transactionId,
-        PaymentURL: `http://localhost:3000/payment/${temp.TransactionId}`,
+        PaymentURL: `http://localhost:3500/payment/${temp.TransactionId}`,
         PaymentExpiresEpoch: temp.ExpiresAt
     })
 })
@@ -92,8 +92,8 @@ app.post("/payment/:id/:status", async (req, res) => {
                 console.log(result.status);
                 throw new Error()
             }
+            return res.redirect("http://localhost:3000/Profile.html?tab=orders")
 
-            return res.json("Payment is Successful")
         }
 
         _database.transactions[id].PaymentStatus = "FAILED"
@@ -113,7 +113,7 @@ app.post("/payment/:id/:status", async (req, res) => {
             console.log(result.status);
             throw new Error()
         }
-        return res.json("Payment is Failed")
+        return res.redirect("http://localhost:3000/Profile.html?tab=orders")
     } catch (ex) {
         res.json("Internal server error")
         console.log(ex.message);
@@ -124,6 +124,6 @@ app.get("/database", (req, res) => {
     res.json(_database)
 })
 
-app.listen(3000, () => {
+app.listen(3500, () => {
     console.log("Server Started");
 })

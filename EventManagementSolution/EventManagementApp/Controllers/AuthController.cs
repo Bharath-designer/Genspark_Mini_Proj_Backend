@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using EventManagementApp.DTOs.User;
+using EventManagementApp.Enums;
 using EventManagementApp.Exceptions;
 using EventManagementApp.Interfaces.Service;
 using EventManagementApp.Services;
@@ -10,7 +12,6 @@ namespace EventManagementApp.Controllers
 {
     [Route("api/")]
     [ApiController]
-    [AllowAnonymous]
     [ExcludeFromCodeCoverage]
 
     public class AuthController : ControllerBase
@@ -24,6 +25,7 @@ namespace EventManagementApp.Controllers
 
         [Route("register")]
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
             try
@@ -57,6 +59,8 @@ namespace EventManagementApp.Controllers
 
         [Route("login")]
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             try
@@ -83,6 +87,28 @@ namespace EventManagementApp.Controllers
             catch (InvalidEmailOrPasswordException ex)
             {
                 return Unauthorized(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
+
+        [Route("verify")]
+        [HttpGet]
+        public async Task<IActionResult> VerifyUser()
+        {
+            try
+            {
+
+                var verifyReturn = new
+                {
+                    role = User.FindFirst(ClaimTypes.Role).Value.ToString() == "Admin" ? UserType.Admin : UserType.User
+                };
+
+                return Ok(verifyReturn);
+
             }
             catch (Exception)
             {

@@ -65,7 +65,9 @@ namespace EventManagementApp.Repositories
                         EventStartDate = e.QuotationRequest.EventStartDate,
                         EventEndDate = e.QuotationRequest.EventEndDate,
                         VenueType = e.QuotationRequest.VenueType,
-                        IsCompleted = e.IsCompleted
+                        IsCompleted = e.IsCompleted,
+                        OrderId = e.ClientResponse.Order.OrderId,
+                        IsReviewed = e.ClientResponse.Review == null ? false : true
 
                     })
                     .OrderBy(e => e.EventStartDate)

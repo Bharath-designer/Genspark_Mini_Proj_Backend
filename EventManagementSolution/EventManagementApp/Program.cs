@@ -55,8 +55,6 @@ namespace EventManagementApp
                 options.UseSqlServer(builder.Configuration.GetConnectionString("default"))
             );
 
-            //builder.Services.AddLogging(l => l.AddLog4Net());
-
             #region Services
             builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
             builder.Services.AddScoped(typeof(ITokenService), typeof(TokenService));
@@ -86,6 +84,8 @@ namespace EventManagementApp
             #endregion
 
 
+
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -94,8 +94,8 @@ namespace EventManagementApp
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowSpecificOrigin");
             app.UseAuthorization();
-
 
             app.MapControllers();
 

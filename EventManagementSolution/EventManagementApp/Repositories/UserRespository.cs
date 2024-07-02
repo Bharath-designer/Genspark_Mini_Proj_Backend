@@ -53,12 +53,21 @@ namespace EventManagementApp.Repositories
                         Currency = q.QuotationResponse.Currency,
                         ResponseMessage = q.QuotationResponse.ResponseMessage,
                         ResponseDate = q.QuotationResponse.ResponseDate,
-                        ClientResponse = q.QuotationResponse.ClientResponse != null ? new ClientResponseDecisionDTO
-                        {
-                            ClientDecision = q.QuotationResponse.ClientResponse.ClientDecision,
-                            OrderId = q.QuotationResponse.ClientResponse.Order.OrderId,
-                            IsPaid = q.QuotationResponse.ClientResponse.Order.OrderStatus == OrderStatus.Completed ? true: false
-                        } : null,
+                        ClientResponse = q.QuotationResponse.ClientResponse != null ? 
+                            q.QuotationResponse.ClientResponse.ClientDecision == ClientDecision.Accepted ?
+                            new ClientResponseDecisionDTO
+                            {
+                                ClientDecision = q.QuotationResponse.ClientResponse.ClientDecision,
+                                OrderId = q.QuotationResponse.ClientResponse.Order.OrderId,
+                                IsPaid = q.QuotationResponse.ClientResponse.Order.OrderStatus == OrderStatus.Completed ? true: false
+                            } :
+                            new ClientResponseDecisionDTO
+                            {
+                                ClientDecision = q.QuotationResponse.ClientResponse.ClientDecision,
+                                OrderId = null,
+                                IsPaid = null
+                            }
+                        : null,
                     } : null
                 })
                 .FirstOrDefaultAsync();
@@ -102,14 +111,23 @@ namespace EventManagementApp.Repositories
                     OrderStatus = o.OrderStatus,
                     TotalAmount = o.TotalAmount,
                     Currency = o.Currency,
-                    EventCategory = new BaseEventCategoryDTO
+                    EventDetails = new UserQuotationRequestDTO
                     {
-                        EventCategoryId = o.EventCategory.EventCategoryId,
-                        EventName = o.EventCategory.EventName,
-                        Description = o.EventCategory.Description,
-                        CreatedDate = o.EventCategory.CreatedDate
+                        QuotationRequestId = o.ClientResponse.QuotationResponse.QuotationRequest.QuotationRequestId,
+                        EventCategory = o.ClientResponse.QuotationResponse.QuotationRequest.EventCategory.EventName,
+                        VenueType = o.ClientResponse.QuotationResponse.QuotationRequest.VenueType,
+                        LocationDetails = o.ClientResponse.QuotationResponse.QuotationRequest.LocationDetails,
+                        FoodPreference = o.ClientResponse.QuotationResponse.QuotationRequest.FoodPreference,
+                        CateringInstructions = o.ClientResponse.QuotationResponse.QuotationRequest.CateringInstructions,
+                        SpecialInstructions = o.ClientResponse.QuotationResponse.QuotationRequest.SpecialInstructions,
+                        QuotationStatus = o.ClientResponse.QuotationResponse.QuotationRequest.QuotationStatus,
+                        EventStartDate = o.ClientResponse.QuotationResponse.QuotationRequest.EventStartDate,
+                        EventEndDate = o.ClientResponse.QuotationResponse.QuotationRequest.EventEndDate,
+                        RequestDate = o.ClientResponse.QuotationResponse.QuotationRequest.RequestDate,
+                        QuotationResponse = null
                     }
                 })
+                .OrderByDescending(q => q.OrderDate)
                 .ToListAsync();
             return userOrders;
         }

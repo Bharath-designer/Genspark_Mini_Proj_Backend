@@ -32,6 +32,7 @@ namespace EventManagementApp.Repositories
                     EventEndDate = q.EventEndDate,
                     RequestDate = q.RequestDate
                 })
+                .OrderByDescending(q => q.RequestDate)
                 .ToListAsync();
             return basicQuotationRequestDTOs;
         }

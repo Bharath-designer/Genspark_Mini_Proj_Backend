@@ -54,10 +54,17 @@ namespace EventManagementApp.Services
                 throw new CurrencyNullException();
             }
 
+            if (createQuotationResponseDTO.RequestStatus == RequestStatus.Denied)
+            {
+                createQuotationResponseDTO.Currency = null;
+                createQuotationResponseDTO.QuotedAmount = null;
+            }
+
+
             QuotationResponse quotationResponse = new QuotationResponse();
             quotationResponse.QuotationRequestId = (int)createQuotationResponseDTO.QuotationRequestId;
             quotationResponse.QuotedAmount = createQuotationResponseDTO.QuotedAmount;
-            quotationResponse.Currency = (Currency)createQuotationResponseDTO.Currency;
+            quotationResponse.Currency = createQuotationResponseDTO.Currency;
             quotationResponse.ResponseMessage = createQuotationResponseDTO.ResponseMessage;
             quotationResponse.RequestStatus = createQuotationResponseDTO.RequestStatus;
 
@@ -81,6 +88,9 @@ namespace EventManagementApp.Services
                 }
                 catch (Exception ex)
                 {
+
+                    Console.WriteLine("---------------");
+                    Console.WriteLine(ex.ToString());   
                     await DBTransaction.RollbackAsync();
                     throw;
                 }

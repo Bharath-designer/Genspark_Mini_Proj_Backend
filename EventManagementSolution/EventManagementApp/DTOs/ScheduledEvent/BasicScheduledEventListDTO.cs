@@ -15,6 +15,8 @@ namespace EventManagementApp.DTOs.ScheduledEvent
         public DateTime EventEndDate { get; set; }
         public DateTime RequestDate { get; set; }
         public bool IsCompleted { get; set; }
+        public int OrderId { get; set; }
+        public bool IsReviewed { get; set; }
 
     }
 }
